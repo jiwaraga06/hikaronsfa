@@ -31,14 +31,14 @@ class AuthCubit extends Cubit<AuthState> {
     Navigator.pushNamedAndRemoveUntil(context, loginScreen, (Route<dynamic> route) => false);
   }
 
-  void getProfile(context) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var username = pref.getString('username');
-    emit(AuthLoading());
-    if (username != null) {
-      emit(AuthProfile(username: username));
-    }
+void getProfile(context) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  var username = pref.getString('username');
+  // emit(AuthLoading());
+  if (username != null) {
+    emit(AuthProfile(username: username));
   }
+}
 
   void login(String username, String password, BuildContext context) async {
     var body = {"username": username, "password": password};
@@ -53,7 +53,7 @@ class AuthCubit extends Cubit<AuthState> {
         pref.setString("user_id", json['data']['user_id'].toString());
         pref.setString("username", json['data']['user_name']);
         pref.setString("user_as_sales_id", json['data']['user_as_sales_id'].toString());
-
+      
         await Future.delayed(const Duration(seconds: 1));
         Navigator.pushNamedAndRemoveUntil(context, dashboardScreen, (Route<dynamic> route) => false);
         emit(AuthLoaded(statusCode: statusCode, json: json));

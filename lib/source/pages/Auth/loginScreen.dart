@@ -39,6 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.of(context).pop();
             MyDialog.dialogAlert(context, data['message']);
           }
+          if (state is AuthLoaded) {
+            // var data = state.json;
+            Navigator.of(context).pop();
+          }
         },
         child: Center(
           child: Form(

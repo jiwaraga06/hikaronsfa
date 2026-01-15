@@ -1,12 +1,20 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:uuid/uuid.dart';
 
 const String APPLICATION_JSON = "application/json";
 const String CONTENT_TYPE = "Content-Type";
 const String ACCEPT = "Accept";
 const String AUTHORIZATION = "authorization";
 
+
+enum AttendanceType { checkIn, checkOut }
+
+late List<CameraDescription> cameras;
+
+var selectedCustomerType = "C";
 const url = "http://192.168.0.124:8000";
 // const url2 = "https://api-v3.hris.rsuumc.com";
 // const url2 = "https://api-v2.rsuumc.com";
@@ -14,6 +22,8 @@ var tanggal = DateFormat('yyyy-MM-dd').format(DateTime.now());
 PermissionStatus? storagePermission;
 PermissionStatus? locationPermission;
 PermissionStatus? cameraPermission;
+
+var oid_uuid = "";
 
 double latitudePlace = -6.803123267471703;
 double longitudePlace = 108.61565805428894;
@@ -31,5 +41,7 @@ const whiteCustom2 = Color.fromARGB(255, 255, 255, 255);
 const merah = Color(0XFFA91D3A);
 const biru = Color(0XFF125B9A);
 const amber = Color(0XFFFAB12F);
+const amber2 = Color(0XFFFCB53B);
 const ungu = Color(0XFF4D2B8C);
 const ungu2 = Color(0XFF62109F);
+const ungu3 = Color(0XFF393D7E);

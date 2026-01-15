@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:hikaronsfa/source/model/Customer/modelCustomer.dart';
 import 'package:hikaronsfa/source/repository/repositoryCustomer.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'get_customer_state.dart';
 
@@ -12,8 +13,10 @@ class GetCustomerCubit extends Cubit<GetCustomerState> {
   GetCustomerCubit({this.repository}) : super(GetCustomerInitial());
 
   void getCustomerAll(context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var user_as_sales_id = pref.getString("user_as_sales_id");
     emit(GetCustomerLoading());
-    repository!.getCustomerAll(context).then((value) {
+    repository!.getCustomerAlls(user_as_sales_id, context).then((value) {
       var json = value.data;
       var statusCode = value.statusCode;
       print("\n $json \n");

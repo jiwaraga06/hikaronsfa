@@ -15,6 +15,10 @@ class MarkerLocationCubit extends Cubit<MarkerLocationState> {
   bool? serviceEnabled;
   LocationPermission? permission;
 
+  void reset(){
+    emit(MarkerLocationInitial());
+  }
+
   void getCurrentLocation() async {
     // bool isJailBroken = await SafeDevice.isJailBroken;
     // bool isRealDevice = await SafeDevice.isRealDevice;
@@ -75,4 +79,6 @@ class MarkerLocationCubit extends Cubit<MarkerLocationState> {
     //   emit(MarkerLocationLoaded(latitude: data.latitude, longitude: data.longitude));
     // });
   }
+
+  void getAddressCustomer(num latitude, num longitude) {}
 }

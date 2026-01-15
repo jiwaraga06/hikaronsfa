@@ -68,6 +68,12 @@ class _LokasiScreenState extends State<LokasiScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    mapController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<AddLocationCubit, AddLocationState>(
@@ -110,19 +116,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
                   options: MapOptions(initialCenter: LatLng(latitude, longitude), initialZoom: currentZoom),
                   children: [
                     TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'dev.fleaflet.flutter_map.example'),
-                    // LOKASI HOSPITAL
-                    CircleLayer(
-                      circles: [
-                        CircleMarker(
-                          point: LatLng(latitudePlace, longitudePlace),
-                          radius: 250,
-                          useRadiusInMeter: true,
-                          color: Colors.red[200]!.withOpacity(0.5),
-                          borderColor: Colors.red.withOpacity(0.5),
-                          borderStrokeWidth: 2,
-                        ),
-                      ],
-                    ),
+
                     // LOKASI USER
                     CircleLayer(
                       circles: [
@@ -266,7 +260,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
                                 setState(() {
                                   print("disana");
                                   data.where((e) => e.ptnrName == value).forEach((a) {
-                                      customer_id = a.ptnrId;
+                                    customer_id = a.ptnrId;
                                   });
                                 });
                               },
