@@ -11,13 +11,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   CameraController? cameraController;
   late final MapController mapController;
   XFile? imageFile;
+  double? latitudePlace = 0.0;
+  double? longitudePlace = 0.0;
   void takePicture() async {
     try {
       final XFile picture = await cameraController!.takePicture();
       setState(() {
         imageFile = picture;
       });
-      imageFile!.name.split('.').last.toLowerCase();
+      // imageFile!.name.split('.').last.toLowerCase();
       // Navigate to the image view page after capturing the image
       // Navigator.push(context, MaterialPageRoute(builder: (context) => ImageViewPage(imagePath: imageFile!.path)));
     } catch (e) {
@@ -36,7 +38,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   void prosesCheckout() async {
     takePicture();
     await Future.delayed(Duration(seconds: 1));
-    BlocProvider.of<AbsensiCheckOutCubit>(context).prosesCheckOut(oid_uuid, imageFile, context);
+    BlocProvider.of<AbsensiCheckOutCubit>(context).prosesCheckOut(oid_uuid, imageFile, latitudePlace, longitudePlace, context);
   }
 
   @override
@@ -87,10 +89,27 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       ),
       body: MultiBlocListener(
         listeners: [
+          BlocListener<GetLocationCustomerCubit, GetLocationCustomerState>(
+            listener: (context, state) {
+              if (state is GetLocationCustomerLoading) {
+                // EasyLoading.show();
+              }
+              if (state is GetLocationCustomerFailed) {
+                // EasyLoading.dismiss();
+              }
+              if (state is GetLocationCustomerLoaded) {
+                // EasyLoading.dismiss();
+                setState(() {
+                  latitudePlace = state.latitudePlace;
+                  longitudePlace = state.longitudePlace;
+                });
+              }
+            },
+          ),
           BlocListener<GetLastCheckInCubit, GetLastCheckInState>(
             listener: (context, state) {
               if (state is GetLastCheckInLoading) {
-                EasyLoading.show();
+                // EasyLoading.show();
               }
               if (state is GetLastCheckInFailed) {
                 EasyLoading.dismiss();

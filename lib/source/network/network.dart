@@ -34,7 +34,7 @@ Future<Response?> network({required String method, required String url, dynamic 
     return response;
   } on DioException catch (e) {
     EasyLoading.dismiss();
-
+    print("\n\nERROR NETWORK: ${e.response?.data} \n\n");
     return Response(
       requestOptions: RequestOptions(path: url),
       statusCode: e.response?.statusCode ?? 500,

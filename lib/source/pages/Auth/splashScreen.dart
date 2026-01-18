@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/images/hikaron.jpg', height: 30),
+            Image.asset('assets/images/hikaron.jpg', height: 20),
             const SizedBox(height: 20),
             CircularProgressIndicator()
           ]

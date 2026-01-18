@@ -60,8 +60,28 @@ class RouterNavigation {
         return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const CheckOutScreen(), transitionsBuilder: rightToLeft);
       case lokasiScreen:
         return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const LokasiScreen(), transitionsBuilder: rightToLeft);
+      case orderScreen:
+        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const OrderScreen(), transitionsBuilder: topToBottom);
+      case orderDetailScreen:
+        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const OrderScreen(), transitionsBuilder: rightToLeft);
+      case visitationScreen:
+        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const VisitationScreen(), transitionsBuilder: topToBottom);
+      case insertVisitationScreen:
+        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const InsertVisitationScreen(), transitionsBuilder: rightToLeft);
+      case updateVisitationScreen:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const UpdateVisitationScreen(),
+          transitionsBuilder: rightToLeft,
+          settings: settings,
+        );
+      case visitationDetailScreen:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const VisitationDetailScreen(),
+          transitionsBuilder: rightToLeft,
+          settings: settings,
+        );
       default:
-      return null;
+        return null;
     }
   }
 }

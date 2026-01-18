@@ -35,7 +35,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               leading: Icon(Icons.person_2),
               title: Text("Check IN", style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
               subtitle: Text("Absen untuk check in kunjungan", style: TextStyle(fontFamily: 'JakartaSansMedium')),
-              onTap: () => Navigator.pushNamed(context, checkInScreen),
+              // onTap: () => Navigator.pushNamed(context, checkInScreen),
+              onTap: () {
+                if (isCheckin == false) {
+                  Navigator.pushNamed(context, checkInScreen);
+                return;
+                } 
+                MyDialog.dialogAlert2(context, "Anda masih memiliki Check In aktif.\nSilakan Check Out terlebih dahulu.");
+              },
             ),
             const SizedBox(height: 20),
           ],
@@ -45,9 +52,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widgets.elementAt(currentIndex),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<GetLastCheckInCubit, GetLastCheckInState>(
+            listener: (context, state) {
+              if (state is GetLastCheckInLoading) {
+                // EasyLoading.show();
+              }
+
+              if (state is GetLastCheckInFailed) {
+                // EasyLoading.dismiss();
+                MyDialog.dialogAlert2(context, state.statusCode == 500 ? "Terjadi kesalahan" : state.json['message']);
+              }
+
+              if (state is GetLastCheckInLoaded) {
+                // EasyLoading.dismiss();
+
+                final data = state.model;
+
+                final bool alreadyCheckIn = data?.attndDateIn != null && data?.attndDateOut == null;
+                setState(() {
+                  if (alreadyCheckIn) {
+                    isCheckin = true;
+                  } else {
+                    isCheckin = false;
+                    // ✅ BOLEH CHECK IN
+                  }
+                });
+              }
+            },
+          ),
+        ],
+        child: widgets.elementAt(currentIndex),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: ungu,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),

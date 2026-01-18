@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:camera/camera.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hikaronsfa/Widget/customDialog.dart';
@@ -19,7 +22,7 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
   final RepositoryAbsensi? repository;
   AbsensiCheckInCubit({this.repository}) : super(AbsensiCheckInInitial());
 
-  void prosesCheckIn(customerid, customername, noncustomername, customerType, latitudePlace, longitudePlace, imageFile, context) async {
+  void prosesCheckIn(customerid, customername, noncustomername, customerType, latitudePlace, longitudePlace, XFile? imageFile, context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var user_id = pref.getString("user_id");
     var user_name = pref.getString("user_name");
@@ -33,11 +36,11 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
     var uuid = Uuid();
     var uniqueID = uuid.v4();
     // HITUNG JARAK
-
+    var convertImg = await File(imageFile!.path).readAsBytes();
     if (customerType == "C") {
       num distanceInMeters = Geolocator.distanceBetween(position.latitude, position.longitude, latitudePlace, longitudePlace);
       // EasyLoading.showInfo("aman : $distanceInMeters");
-      var body = {
+      var body = FormData.fromMap({
         "attnd_oid": "$uniqueID",
         "attnd_type": "$customerType",
         "attnd_sales_id": "$user_as_sales_id",
@@ -47,13 +50,15 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
         "attnd_time_in": "$jam",
         "attnd_latitude_in": "${position.latitude}",
         "attnd_longitude_in": "${position.longitude}",
-        "attnd_image_in": " ${imageFile!.path.split('/').last}",
+        "attnd_image_in": await MultipartFile.fromFile(imageFile!.path, filename: imageFile.name),
+        // "attnd_image_in": " ${imageFile!.path.split('/').last}",
+        // "attnd_image_in": " ${base64Encode(convertImg)}",
         // "attnd_image_in": "SAMPLE_GAMBAR.jpg",
         "attnd_loc_desc_in": "$alamat",
         "attnd_current_status": "IN",
-      };
-      print(jsonEncode(body));
-      if (distanceInMeters < 10000) {
+      });
+      print(body.files);
+      if (distanceInMeters < 100000) {
         repository!.checkIN(body, context).then((value) {
           var json = value.data;
           var statusCode = value.statusCode;
@@ -71,7 +76,7 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
       }
     } else if (customerType == "N") {
       // EasyLoading.showInfo("aman : $distanceInMeters");
-      var body = {
+      var body = FormData.fromMap({
         "attnd_oid": "$uniqueID",
         "attnd_type": "$customerType",
         "attnd_sales_id": "$user_as_sales_id",
@@ -81,12 +86,12 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
         "attnd_time_in": "$jam",
         "attnd_latitude_in": "${position.latitude}",
         "attnd_longitude_in": "${position.longitude}",
-        "attnd_image_in": " ${imageFile!.path.split('/').last}",
+        "attnd_image_in": await MultipartFile.fromFile(imageFile!.path, filename: imageFile.name),
         // "attnd_image_in": "SAMPLE_GAMBAR.jpg",
         "attnd_loc_desc_in": "$alamat",
         "attnd_current_status": "IN",
-      };
-      print(jsonEncode(body));
+      });
+      // print(jsonEncode(body));
       repository!.checkIN(body, context).then((value) {
         var json = value.data;
         var statusCode = value.statusCode;

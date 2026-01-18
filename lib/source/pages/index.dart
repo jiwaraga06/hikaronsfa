@@ -1,7 +1,9 @@
+import 'package:advanced_searchable_dropdown/advanced_searchable_dropdown.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hikaronsfa/Widget/attendanceCard.dart';
@@ -9,10 +11,15 @@ import 'package:hikaronsfa/Widget/customButton.dart';
 import 'package:hikaronsfa/Widget/customButton2.dart';
 import 'package:hikaronsfa/Widget/customDialog.dart';
 import 'package:hikaronsfa/Widget/customField.dart';
+import 'package:hikaronsfa/Widget/customField2.dart';
 import 'package:hikaronsfa/source/env/address.dart';
 import 'package:hikaronsfa/source/env/convertLocation.dart';
 import 'package:hikaronsfa/source/env/env.dart';
+import 'package:hikaronsfa/source/env/formatDate.dart';
 import 'package:hikaronsfa/source/env/formatTime.dart';
+import 'package:hikaronsfa/source/env/pickDate.dart';
+import 'package:hikaronsfa/source/model/Customer/modelCustomerVisitation.dart';
+import 'package:hikaronsfa/source/model/Visitation/modelVisitatioDetail.dart';
 import 'package:hikaronsfa/source/router/string.dart';
 import 'package:hikaronsfa/source/service/Absensi/cubit/absensi_check_in_cubit.dart';
 import 'package:hikaronsfa/source/service/Absensi/cubit/absensi_check_out_cubit.dart';
@@ -21,11 +28,19 @@ import 'package:hikaronsfa/source/service/Auth/cubit/auth_cubit.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:hikaronsfa/source/service/Auth/cubit/profile_cubit.dart';
 import 'package:hikaronsfa/source/service/Customer/cubit/get_customer_cubit.dart';
+import 'package:hikaronsfa/source/service/Customer/cubit/get_customer_visitation_cubit.dart';
 import 'package:hikaronsfa/source/service/Location/cubit/add_location_cubit.dart';
 import 'package:hikaronsfa/source/service/Location/cubit/distance_location_cubit.dart';
 import 'package:hikaronsfa/source/service/Location/cubit/get_location_customer_cubit.dart';
 import 'package:hikaronsfa/source/service/MarkerLocation/cubit/marker_location_cubit.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:hikaronsfa/source/service/Order/cubit/get_order_cubit.dart';
+import 'package:hikaronsfa/source/service/Visitation/Delete/cubit/delete_visitation_cubit.dart';
+import 'package:hikaronsfa/source/service/Visitation/Insert/cubit/insert_visitation_cubit.dart';
+import 'package:hikaronsfa/source/service/Visitation/Update/cubit/update_visitation_cubit.dart';
+import 'package:hikaronsfa/source/service/Visitation/cubit/get_visitation_cubit.dart';
+import 'package:hikaronsfa/source/service/Visitation/cubit/get_visitation_detail_cubit.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
@@ -40,7 +55,13 @@ part 'Menu/Profile/profile.dart';
 // Absensi
 part 'Menu/Absensi/checkin.dart';
 part 'Menu/Absensi/checkout.dart';
-// Loaksi
+// Lokasi
 part 'Menu/Lokasi/lokasi.dart';
-
-
+// Order
+part 'Menu/Home/Order/order.dart';
+part 'Menu/Home/Order/orderDetail.dart';
+// Visitation
+part 'Menu/Home/Visitation/visitation.dart';
+part 'Menu/Home/Visitation/insertVisitation.dart';
+part 'Menu/Home/Visitation/updateVisitation.dart';
+part 'Menu/Home/Visitation/visitationDetail.dart';

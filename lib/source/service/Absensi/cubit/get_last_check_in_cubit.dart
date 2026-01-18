@@ -17,15 +17,30 @@ class GetLastCheckInCubit extends Cubit<GetLastCheckInState> {
     var salesid = pref.getString("user_as_sales_id");
 
     emit(GetLastCheckInLoading());
-    repository!.lastCheckIn(salesid, type, context).then((value) {
-      var json = value.data;
-      var statusCode = value.statusCode;
-      print("GET LASH CHECK IN : $json");
-      if (statusCode == 200) {
-        emit(GetLastCheckInLoaded(statusCode: statusCode, model: modelLastCheckInFromJson(jsonEncode(json['data']))));
-      } else {
-        emit(GetLastCheckInFailed(statusCode: statusCode, json: json));
-      }
-    });
+
+    repository!
+        .lastCheckIn(salesid, type, context)
+        .then((value) {
+          final json = value.data;
+          final statusCode = value.statusCode;
+
+          // print("GET LAST CHECK IN : $json");
+
+          if (statusCode == 200) {
+            final data = json?['data'];
+
+            if (data == null) {
+              // data kosong tapi request sukses
+              emit(GetLastCheckInLoaded(statusCode: statusCode, model: null));
+            } else {
+              emit(GetLastCheckInLoaded(statusCode: statusCode, model: modelLastCheckInFromJson(jsonEncode(data))));
+            }
+          } else {
+            emit(GetLastCheckInFailed(statusCode: statusCode, json: json));
+          }
+        })
+        .catchError((e) {
+          emit(GetLastCheckInFailed(statusCode: 500, json: {'message': e.toString()}));
+        });
   }
 }

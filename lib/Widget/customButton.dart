@@ -30,42 +30,22 @@ class CustomButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              blurRadius: 2,
-              spreadRadius: 1,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 2, spreadRadius: 1, offset: const Offset(0, 2))],
         ),
         child: SizedBox(
           height: height,
           child: Center(
-            child: icon == null
-                ? Text(
-                    text,
-                    style: textStyle ??
-                        const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(icon, color: iconColor, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        text,
-                        style: textStyle ??
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                    ],
-                  ),
+            child:
+                icon == null
+                    ? Text(text, style: textStyle ?? const TextStyle(color: Colors.white, fontWeight: FontWeight.w600))
+                    : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(icon, color: iconColor, size: 20),
+                        const SizedBox(width: 8),
+                        Text(text, style: textStyle ?? const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
           ),
         ),
       ),

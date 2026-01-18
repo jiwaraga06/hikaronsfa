@@ -31,7 +31,7 @@ class _CheckINScreenState extends State<CheckINScreen> {
       setState(() {
         imageFile = picture;
       });
-      imageFile!.name.split('.').last.toLowerCase();
+      // imageFile!.name.split('.').last.toLowerCase();
       // Navigate to the image view page after capturing the image
       // Navigator.push(context, MaterialPageRoute(builder: (context) => ImageViewPage(imagePath: imageFile!.path)));
     } catch (e) {
@@ -304,50 +304,21 @@ class _CheckINScreenState extends State<CheckINScreen> {
                       if (selectedCustomerType == "C")
                         BlocBuilder<GetCustomerCubit, GetCustomerState>(
                           builder: (context, state) {
-                            if (state is GetCustomerLoading) {
-                              return DropdownSearch(
-                                popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
-                                items: [].map((e) => e).toList(),
-                                dropdownDecoratorProps: const DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    // border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                    hintText: "Customer",
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              );
-                            }
-                            if (state is GetCustomerLoaded == false) {
-                              return DropdownSearch(
-                                popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
-                                items: [].map((e) => e).toList(),
-                                dropdownDecoratorProps: const DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    // border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                    hintText: "Customer",
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              );
-                            }
-                            var data = (state as GetCustomerLoaded).model;
+                            final bool isLoaded = state is GetCustomerLoaded;
+                            // final data = (state as GetCustomerLoaded).model;
+                            final data = isLoaded ? state.model : [];
                             return DropdownSearch(
                               popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
                               items: data.map((e) => e.ptnrName).toList(),
+                              selectedItem: customer_name,
                               dropdownDecoratorProps: const DropDownDecoratorProps(
                                 dropdownSearchDecoration: InputDecoration(
-                                  // border: OutlineInputBorder(),
                                   contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                   hintText: "Search Customer",
                                   labelStyle: TextStyle(color: Colors.black),
                                   hintStyle: TextStyle(color: Colors.black),
                                 ),
                               ),
-                              selectedItem: customer_name,
                               onChanged: (value) {
                                 setState(() {
                                   print("disana");

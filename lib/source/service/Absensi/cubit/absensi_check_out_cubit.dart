@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hikaronsfa/source/env/address.dart';
 import 'package:hikaronsfa/source/env/formatDate.dart';
@@ -13,26 +17,30 @@ class AbsensiCheckOutCubit extends Cubit<AbsensiCheckOutState> {
   final RepositoryAbsensi? repository;
   AbsensiCheckOutCubit({this.repository}) : super(AbsensiCheckOutInitial());
 
-  void prosesCheckOut(oid, imageFile, context) async {
+  void prosesCheckOut(oid, imageFile, latitudePlace, longitudePlace, context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var user_as_sales_id = pref.getString("user_as_sales_id");
     var tanggal = formatDate(DateTime.now());
     var jam = formatDateToTime(DateTime.now());
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    num distanceInMeters = Geolocator.distanceBetween(position.latitude, position.longitude, latitudePlace, longitudePlace);
     print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
     var alamat = await getFullAddress(latitude: position.latitude, longitude: position.longitude);
-    var body = {
+    var convertImg = await File(imageFile.path).readAsBytes();
+    var body = FormData.fromMap({
       "attnd_date_out": "$tanggal",
       "attnd_time_out": "$jam",
       "attnd_latitude_out": "${position.latitude}",
       "attnd_longitude_out": "${position.latitude}",
       // "attnd_image_out": "checkout2.jpg",
-      "attnd_image_out": "${imageFile!.path.split('/').last}",
+      // "attnd_image_out": "${imageFile!.path.split('/').last}",
+      // "attnd_image_out": "${base64Encode(convertImg)}",
+      "attnd_image_out": await MultipartFile.fromFile(imageFile!.path, filename: imageFile.name),
       "attnd_loc_desc_out": "$alamat",
       "attnd_current_status": "OUT",
       "user_as_sales_id": "$user_as_sales_id",
       "attnd_oid": "$oid",
-    };
+    });
     print(body);
     emit(AbsensiCheckOutLoading());
     final response = await repository!.checkOUT(body, context);

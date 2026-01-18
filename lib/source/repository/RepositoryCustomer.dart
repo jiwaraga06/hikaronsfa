@@ -6,4 +6,9 @@ class RepositoryCustomer {
     var json = await network(url: ApiCustomer.getCustomerAll(salesId), method: "GET", body: null, context: context);
     return json;
   }
+
+  Future getCustomerVisitation(salesId, context) async {
+    var json = await network(url: ApiCustomer.getCustomerVisitation(salesId), method: "GET", body: null, context: context);
+    return json;
+  }
 }

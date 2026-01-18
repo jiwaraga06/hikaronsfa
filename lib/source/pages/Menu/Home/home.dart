@@ -16,6 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  final List<String> titleMenu = ["Aktifitas Kunjungan"];
+  final List<String> routeMenu = [visitationScreen];
+  final List<IconData> iconMenu = [Icons.insert_invitation];
+
   @override
   void initState() {
     super.initState();
@@ -60,7 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisSpacing: 12,
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, orderScreen);
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       color: ungu3,
@@ -155,6 +161,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 );
               },
+            ),
+            const SizedBox(height: 20),
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 4,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              childAspectRatio: 1, // kotak
+              padding: const EdgeInsets.all(8),
+              children: List.generate(titleMenu.length, (index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, routeMenu[index]);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 4, offset: const Offset(0, 2))],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(iconMenu[index], size: 22),
+                        const SizedBox(height: 6),
+                        Text(titleMenu[index], textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
           ],
         ),
