@@ -8,6 +8,9 @@ import 'package:hikaronsfa/source/repository/RepositoryAbsensi.dart';
 import 'package:hikaronsfa/source/repository/RepositoryAuth.dart';
 import 'package:hikaronsfa/source/repository/RepositoryLocation.dart';
 import 'package:hikaronsfa/source/repository/RepositoryOrder.dart';
+import 'package:hikaronsfa/source/repository/RepositoryVisitDiscuss.dart';
+import 'package:hikaronsfa/source/repository/RepositoryVisitImage.dart';
+import 'package:hikaronsfa/source/repository/RepositoryVisitPic.dart';
 import 'package:hikaronsfa/source/repository/RepositoryVisitation.dart';
 import 'package:hikaronsfa/source/repository/repositoryCustomer.dart';
 import 'package:hikaronsfa/source/router/router.dart';
@@ -31,6 +34,18 @@ import 'package:hikaronsfa/source/service/Visitation/Insert/cubit/insert_visitat
 import 'package:hikaronsfa/source/service/Visitation/Update/cubit/update_visitation_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/cubit/get_visitation_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/cubit/get_visitation_detail_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationDiscuss/Insert/cubit/insert_visitation_discuss_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationDiscuss/Update/cubit/update_visitation_discuss_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationDiscuss/cubit/discuss_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationDiscuss/cubit/get_visitation_discuss_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationImage/Insert/cubit/insert_visitation_image_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationImage/Update/cubit/update_visitation_image_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationImage/cubit/get_visitation_image_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationImage/cubit/lampiran_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationPic/Insert/cubit/insert_visitation_pic_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationPic/Update/cubit/update_visitation_pic_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationPic/cubit/get_visitation_pic_cubit.dart';
+import 'package:hikaronsfa/source/service/VisitationPic/cubit/pic_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
@@ -82,6 +97,9 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(create: (context) => RepositoryAbsensi()),
         RepositoryProvider(create: (context) => RepositoryOrder()),
         RepositoryProvider(create: (context) => RepositoryVisitation()),
+        RepositoryProvider(create: (context) => RepositoryVisitPic()),
+        RepositoryProvider(create: (context) => RepositoryVisitDiscuss()),
+        RepositoryProvider(create: (context) => RepositoryVisitImage()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -112,6 +130,21 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => InsertVisitationCubit(repository: RepositoryVisitation())),
           BlocProvider(create: (context) => UpdateVisitationCubit(repository: RepositoryVisitation())),
           BlocProvider(create: (context) => DeleteVisitationCubit(repository: RepositoryVisitation())),
+          // VISIT PIC
+          BlocProvider(create: (context) => PicCubit()),
+          BlocProvider(create: (context) => DiscussCubit()),
+          BlocProvider(create: (context) => LampiranCubit()),
+          BlocProvider(create: (context) => GetVisitationPicCubit(repository: RepositoryVisitPic())),
+          BlocProvider(create: (context) => InsertVisitationPicCubit(repository: RepositoryVisitPic())),
+          BlocProvider(create: (context) => UpdateVisitationPicCubit(repository: RepositoryVisitPic())),
+          // VISIT DISCUSS
+          BlocProvider(create: (context) => GetVisitationDiscussCubit(repository: RepositoryVisitDiscuss())),
+          BlocProvider(create: (context) => InsertVisitationDiscussCubit(repository: RepositoryVisitDiscuss())),
+          BlocProvider(create: (context) => UpdateVisitationDiscussCubit(repository: RepositoryVisitDiscuss())),
+          // VISIT IMAGE
+          BlocProvider(create: (context) => GetVisitationImageCubit(repository: RepositoryVisitImage())),
+          BlocProvider(create: (context) => InsertVisitationImageCubit(repository: RepositoryVisitImage())),
+          BlocProvider(create: (context) => UpdateVisitationImageCubit(repository: RepositoryVisitImage())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

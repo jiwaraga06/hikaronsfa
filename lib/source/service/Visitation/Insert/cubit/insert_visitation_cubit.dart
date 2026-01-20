@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:hikaronsfa/source/env/env.dart';
 import 'package:hikaronsfa/source/repository/RepositoryVisitation.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +14,14 @@ class InsertVisitationCubit extends Cubit<InsertVisitationState> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var username = pref.getString("username");
     var salesId = pref.getString("user_as_sales_id");
-    var body = {"username": "$username", "visitation_date": "$date", "customer_id": "$customerId", "attnd_oid": "$attndOid", "sales_id": "$salesId"};
+    var body = {
+      "username": "$username",
+      "visitationOid": "$visitationOid",
+      "visitation_date": "$date",
+      "customer_id": "$customerId",
+      "attnd_oid": "$attndOid",
+      "sales_id": "$salesId",
+    };
     print(body);
     emit(InsertVisitationLoading());
     final response = await repository!.insertVisitation(body, context);

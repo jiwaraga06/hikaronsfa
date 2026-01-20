@@ -1,5 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:hikaronsfa/source/model/VisitDiscuss/modelEntryDiscuss.dart';
+import 'package:hikaronsfa/source/model/VisitImage/modelEntryImage.dart';
+import 'package:hikaronsfa/source/model/VisitPIC/modelEntryPIC.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
@@ -14,8 +17,8 @@ enum AttendanceType { checkIn, checkOut }
 late List<CameraDescription> cameras;
 
 var selectedCustomerType = "C";
-// const url = "http://192.168.0.126:8000";
-const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
+const url = "http://192.168.0.126:8000";
+// const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
 // const url = "http://203.210.84.8:9999";
 // const url2 = "https://api-v3.hris.rsuumc.com";
 // const url2 = "https://api-v2.rsuumc.com";
@@ -27,8 +30,14 @@ PermissionStatus? cameraPermission;
 bool isCheckin = false;
 
 var oid_uuid = "";
+var visitationd_VisitationOid = "";
+var visitationOid = "";
+var visitationOidBaru = "";
 
 int selectedIndex = 0;
+final List<ModelEntryImage> modelEntryImage = [];
+final List<ModelEntryPIC> modelEntryPIC = [];
+final List<ModelEntryDiscuss> modelEntryDiscuss = [];
 
 const hijau = Color(0XFF00712D);
 const hijauDark = Color(0XFF1A5319);

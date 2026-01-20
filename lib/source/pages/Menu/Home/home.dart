@@ -113,7 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Expanded(
                     child: GestureDetector(
                       onTap: () => onSelectCustomerType(index),
-
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
                         curve: Curves.easeInExpo,

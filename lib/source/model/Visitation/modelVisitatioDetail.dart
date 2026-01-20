@@ -59,44 +59,58 @@ class Order {
 }
 
 class OrderKeteranganDetail {
-  OrderKeteranganDetail({required this.visitationdOid, required this.visitationdRemarks});
-
   final String? visitationdOid;
   final String? visitationdRemarks;
+  final String? visitationdVisitationOid;
 
+  OrderKeteranganDetail({required this.visitationdOid, required this.visitationdRemarks, required this.visitationdVisitationOid});
   factory OrderKeteranganDetail.fromJson(Map<String, dynamic> json) {
-    return OrderKeteranganDetail(visitationdOid: json["visitationd_oid"], visitationdRemarks: json["visitationd_remarks"]);
+    return OrderKeteranganDetail(
+      visitationdOid: json["visitationd_oid"],
+      visitationdRemarks: json["visitationd_remarks"],
+      visitationdVisitationOid: json["visitationd_visitation_oid"],
+    );
   }
+  @override
+  String toString() => "{visitationdOid: $visitationdOid, visitationdRemarks: $visitationdRemarks,  visitationdVisitationOid: $visitationdVisitationOid}";
 }
 
 class OrderLampiranDetail {
-  OrderLampiranDetail({required this.visitationdOid, required this.visitationdRemarks, required this.visitationdImage});
-
   final String? visitationdOid;
   final String? visitationdRemarks;
   final String? visitationdImage;
+  final String? visitationdVisitationOid;
 
+  OrderLampiranDetail({required this.visitationdOid, required this.visitationdRemarks, required this.visitationdImage, required this.visitationdVisitationOid});
   factory OrderLampiranDetail.fromJson(Map<String, dynamic> json) {
     return OrderLampiranDetail(
       visitationdOid: json["visitationd_oid"],
       visitationdRemarks: json["visitationd_remarks"],
       visitationdImage: json["visitationd_image"],
+      visitationdVisitationOid: json["visitationd_visitation_oid"],
     );
   }
+  @override
+  String toString() => "{visitationdOid: $visitationdOid, visitationdRemarks: $visitationdRemarks, visitationdImage: $visitationdImage, visitationdVisitationOid: $visitationdVisitationOid}";
 }
 
 class OrderPicDetail {
-  OrderPicDetail({required this.visitationdOid, required this.visitationdRemarks, required this.visitationdJabatan});
-
   final String? visitationdOid;
   final String? visitationdRemarks;
   final String? visitationdJabatan;
+  final String? visitationdVisitationOid;
+
+  OrderPicDetail({required this.visitationdOid, required this.visitationdRemarks, required this.visitationdJabatan, required this.visitationdVisitationOid});
 
   factory OrderPicDetail.fromJson(Map<String, dynamic> json) {
     return OrderPicDetail(
       visitationdOid: json["visitationd_oid"],
+      visitationdVisitationOid: json["visitationd_visitation_oid"],
       visitationdRemarks: json["visitationd_remarks"],
       visitationdJabatan: json["visitationd_jabatan"],
     );
   }
+  @override
+  String toString() =>
+      "{visitationdOid: $visitationdOid, visitationdRemarks: $visitationdRemarks, visitationdJabatan: $visitationdJabatan, visitationdVisitationOid: $visitationdVisitationOid}";
 }

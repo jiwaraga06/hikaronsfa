@@ -71,7 +71,6 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                     ),
                     const SizedBox(height: 12),
                     const Divider(),
-                    
                   ],
                 ),
               ),

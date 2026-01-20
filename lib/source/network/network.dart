@@ -13,7 +13,7 @@ Future<Response?> network({required String method, required String url, dynamic 
 
   var headers = {
     'Authorization': 'Bearer $token',
-    // 'Accept': 'application/json'
+    'Accept': 'application/json'
   };
 
   try {
