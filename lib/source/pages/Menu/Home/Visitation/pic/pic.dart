@@ -79,16 +79,21 @@ class _PicViewState extends State<PicView> {
                       ],
                     ),
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: whiteCustom2,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 6, offset: const Offset(0, 2))],
                       ),
-                      child: ListTile(
-                        title: Text(a.visitationdRemarks!, style: TextStyle(fontFamily: 'InterMedium')),
-                        subtitle: Text(a.visitationdJabatan!, style: TextStyle(fontFamily: 'InterRegular')),
-                        shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1), borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(a.visitationdRemarks!, style: TextStyle(fontFamily: 'InterMedium', fontSize: 14)),
+                          const SizedBox(height: 6),
+                          Text(a.visitationdJabatan!, style: TextStyle(fontFamily: 'InterRegular', fontSize: 12)),
+                        ],
                       ),
                     ),
                   );

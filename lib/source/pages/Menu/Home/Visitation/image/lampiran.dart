@@ -100,9 +100,9 @@ class _LampiranViewState extends State<LampiranView> {
                                 child: InteractiveViewer(
                                   child: Image.network(
                                     "$url/storage/uploads/visitation/${a.visitationdImages}",
-                                    height: 100,
-                                    width: 100,
-                                    fit: BoxFit.cover,
+                                    height: 120,
+                                    width: 120,
+                                    fit: BoxFit.contain,
                                     errorBuilder: (_, __, ___) {
                                       return const SizedBox(height: 120, width: 120, child: Center(child: Text('Gagal')));
                                     },
@@ -119,7 +119,15 @@ class _LampiranViewState extends State<LampiranView> {
 
                             const SizedBox(width: 12),
 
-                            Expanded(child: Text(a.visitationdRemarks ?? '-', style: const TextStyle(fontSize: 14, fontFamily: 'InterMedium'))),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Keterangan', style: const TextStyle(fontSize: 14, fontFamily: 'InterMedium')),
+                                  Text(a.visitationdRemarks ?? '-', style: const TextStyle(fontSize: 14, fontFamily: 'InterRegular')),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

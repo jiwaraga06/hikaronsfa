@@ -29,12 +29,12 @@ Widget attendanceCard({required String title, required bool isLoading, required 
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(width: 12),
-                Icon(Icons.watch_later_rounded, color: biru.withOpacity(0.5), size: 30),
+                Icon(Icons.watch_later_rounded, color: biru.withOpacity(0.5), size: 28),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 16, fontFamily: 'InterMedium')),
+                    Text(title, style: const TextStyle(fontSize: 14, fontFamily: 'InterMedium')),
                     Text(
                       data.attndDateIn == null ? '-' : formatDate3(DateTime.parse(data.attndDateIn!)),
                       style: const TextStyle(fontSize: 12, fontFamily: 'InterSemiBold'),
@@ -46,14 +46,15 @@ Widget attendanceCard({required String title, required bool isLoading, required 
             Padding(
               padding: const EdgeInsets.only(left: 12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 8),
                   data.attndTimeIn == null
                       ? Text("-", style: TextStyle(fontSize: 23, fontFamily: 'InterSemiBold'))
-                      : Text(formatDateToTime3(DateTime.parse(data.attndTimeIn!)), style: const TextStyle(fontSize: 23, fontFamily: 'InterSemiBold')),
+                      : Text(formatDateToTime3(DateTime.parse(data.attndTimeIn!)), style: const TextStyle(fontSize: 20, fontFamily: 'InterSemiBold')),
                   const SizedBox(height: 8),
-                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 14, fontFamily: 'InterRegular'), maxLines: 1),
+                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 12, fontFamily: 'InterRegular'), maxLines: 1),
                 ],
               ),
             ),
@@ -78,12 +79,12 @@ Widget attendanceCard({required String title, required bool isLoading, required 
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(width: 12),
-                Icon(Icons.watch_later_rounded, color: merah.withOpacity(0.5), size: 30),
+                Icon(Icons.watch_later_rounded, color: merah.withOpacity(0.5), size: 28),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 16, fontFamily: 'InterMedium')),
+                    Text(title, style: const TextStyle(fontSize: 14, fontFamily: 'InterMedium')),
                     Text(
                       data.attndDateOut == null ? '-' : formatDate3(DateTime.parse(data.attndDateIn!)),
                       style: const TextStyle(fontSize: 12, fontFamily: 'InterSemiBold'),
@@ -99,10 +100,10 @@ Widget attendanceCard({required String title, required bool isLoading, required 
                 children: [
                   const SizedBox(height: 8),
                   data.attndTimeOut == null
-                      ? Text("Check Out disini", style: TextStyle(fontSize: 15, fontFamily: 'InterSemiBold'))
-                      : Text(formatDateToTime3(DateTime.parse(data.attndTimeOut!)), style: const TextStyle(fontSize: 23, fontFamily: 'InterSemiBold')),
+                      ? Text("Check Out disini", style: TextStyle(fontSize: 13, fontFamily: 'InterSemiBold'))
+                      : Text(formatDateToTime3(DateTime.parse(data.attndTimeOut!)), style: const TextStyle(fontSize: 20, fontFamily: 'InterSemiBold')),
                   const SizedBox(height: 8),
-                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 14, fontFamily: 'InterRegular'), maxLines: 1),
+                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 12, fontFamily: 'InterRegular'), maxLines: 1),
                 ],
               ),
             ),

@@ -28,15 +28,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.pin_drop, color: merah,),
-              title: Text("Lokasi", style: TextStyle(fontFamily: 'InterSemiBold')),
-              subtitle: Text("Setting lokasi Customer", style: TextStyle(fontFamily: 'InterMedium')),
+              leading: Icon(Icons.pin_drop, color: merah),
+              title: Text("Lokasi", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+              subtitle: Text("Setting lokasi Customer", style: TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
               onTap: () => Navigator.pushNamed(context, lokasiScreen),
             ),
             ListTile(
               leading: Icon(Icons.person_2, color: biru),
-              title: Text("Check IN", style: TextStyle(fontFamily: 'InterSemiBold')),
-              subtitle: Text("Absen untuk check in kunjungan", style: TextStyle(fontFamily: 'InterMedium')),
+              title: Text("Check IN", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+              subtitle: Text("Absen untuk check in kunjungan", style: TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
               // onTap: () => Navigator.pushNamed(context, checkInScreen),
               onTap: () {
                 print(isCheckin);
@@ -101,8 +101,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               currentIndex: currentIndex,
               type: BottomNavigationBarType.fixed,
               onTap: onItemTapped,
-              selectedLabelStyle: TextStyle(fontFamily: 'InterMedium', color: ungu3, fontSize: 15),
-              unselectedLabelStyle: TextStyle(fontFamily: 'InterRegular', color: grey3, fontSize: 15),
+              selectedLabelStyle: TextStyle(fontFamily: 'InterMedium', color: ungu3, fontSize: 13),
+              unselectedLabelStyle: TextStyle(fontFamily: 'InterRegular', color: grey3, fontSize: 11),
               items: [
                 BottomNavigationBarItem(icon: Image.asset(currentIndex == 0 ? 'assets/images/Home.png' : 'assets/images/HomeGrey.png'), label: 'Home'),
                 BottomNavigationBarItem(

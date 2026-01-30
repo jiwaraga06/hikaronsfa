@@ -15,6 +15,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
 
   void addLocation(latitude, longitude) {
     Navigator.of(context).pop();
+    print(customer_id);
     BlocProvider.of<AddLocationCubit>(context).addLocation(customer_id, latitude, longitude, controllerDesc.text, context);
   }
 
@@ -27,34 +28,53 @@ class _LokasiScreenState extends State<LokasiScreen> {
   }
 
   void modelAddLocation(latitude, longitude) {
-    showModalBottomSheet(
+    showGeneralDialog(
       context: context,
-      showDragHandle: true,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomField(controller: controllerDesc, maxline: 3, hintText: "Tolong berikan keterangan", labelText: "Description"),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 48,
-                child: CustomButton2(
-                  onTap: () {
-                    addLocation(latitude, longitude);
-                  },
-                  text: "Mark Location",
-                  backgroundColor: ungu,
-                  textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
-                  roundedRectangleBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                ),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Keterangan Lokasi', style: TextStyle(fontSize: 14, fontFamily: 'InterSemiBold')),
+                        IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  CustomField(controller: controllerDesc, maxline: 5, hintText: "Tolong berikan keterangan", labelText: "Description"),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 48,
+                    child: CustomButton2(
+                      onTap: () {
+                        addLocation(latitude, longitude);
+                      },
+                      text: "Mark Location",
+                      backgroundColor: ungu,
+                      textStyle: const TextStyle(color: whiteCustom, fontSize: 14, fontFamily: 'JakartaSansSemiBold'),
+                      roundedRectangleBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 30),
-            ],
+            ),
           ),
         );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return Transform.scale(scale: Curves.easeOutBack.transform(anim.value), child: Opacity(opacity: anim.value, child: child));
       },
     );
   }
@@ -221,11 +241,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(8),
                     // margin: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: whiteCustom2,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black.withOpacity(0.5)),
-                    ),
+                    decoration: BoxDecoration(color: whiteCustom2, borderRadius: BorderRadius.circular(8)),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -234,30 +250,56 @@ class _LokasiScreenState extends State<LokasiScreen> {
                             final bool isLoaded = state is GetCustomerLoaded;
                             // final data = (state as GetCustomerLoaded).model;
                             final data = isLoaded ? state.model! : [];
-
-                            return DropdownSearch(
-                              popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
-                              items: data.map((e) => e.ptnrName).toList(),
-                              dropdownDecoratorProps: const DropDownDecoratorProps(
-                                dropdownSearchDecoration: InputDecoration(
-                                  // border: OutlineInputBorder(),
-                                  // contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                  hintText: "Search Customer",
-                                  labelText: "Customer",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintStyle: TextStyle(color: Colors.black),
-                                ),
+                            return SearchableDropDown(
+                              menuList:
+                                  data.map((e) {
+                                    return SearchableDropDownItem(label: "${e.ptnrName}", value: e.ptnrId);
+                                  }).toList(),
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
+                                hintText: "Choose Customer",
+                                labelStyle: TextStyle(color: Colors.black),
+                                hintStyle: TextStyle(color: Colors.black),
                               ),
-                              selectedItem: customer_name,
-                              onChanged: (value) {
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Customer belum dipilih";
+                                }
+                              },
+                              value: customer_id,
+                              onSelected: (item) {
                                 setState(() {
-                                  print("disana");
-                                  data.where((e) => e.ptnrName == value).forEach((a) {
+                                  print("Selected: ${item.label}");
+                                  data.where((e) => e.ptnrName == item).forEach((a) {
                                     customer_id = a.ptnrId;
                                   });
                                 });
                               },
                             );
+                            // return DropdownSearch(
+                            //   popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
+                            //   items: data.map((e) => e.ptnrName).toList(),
+                            //   dropdownDecoratorProps: const DropDownDecoratorProps(
+                            //     dropdownSearchDecoration: InputDecoration(
+                            //       // border: OutlineInputBorder(),
+                            //       // contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            //       hintText: "Search Customer",
+                            //       labelText: "Customer",
+                            //       labelStyle: TextStyle(color: Colors.black),
+                            //       hintStyle: TextStyle(color: Colors.black),
+                            //     ),
+                            //   ),
+                            //   selectedItem: customer_name,
+                            //   onChanged: (value) {
+                            //     setState(() {
+                            //       print("disana");
+                            //       data.where((e) => e.ptnrName == value).forEach((a) {
+                            //         customer_id = a.ptnrId;
+                            //       });
+                            //     });
+                            //   },
+                            // );
                           },
                         ),
                       ],

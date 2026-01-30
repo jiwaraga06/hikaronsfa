@@ -79,15 +79,21 @@ class _DiskusiViewState extends State<DiskusiView> {
                       ],
                     ),
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: whiteCustom2,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 6, offset: const Offset(0, 2))],
                       ),
-                      child: ListTile(
-                        title: Text(a.visitationdRemarks!),
-                        shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Bahan Diskusi", style: TextStyle(fontFamily: "InterMedium", fontSize: 14)),
+                          const SizedBox(height: 6),
+                          Text(a.visitationdRemarks!, style: TextStyle(fontFamily: "InterRegular", fontSize: 12)),
+                        ],
                       ),
                     ),
                   );

@@ -79,7 +79,7 @@ class _VisitationScreenState extends State<VisitationScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                  
+
                       Row(children: const [Expanded(child: Text('Start Date')), SizedBox(width: 12), Expanded(child: Text('End Date'))]),
                       const SizedBox(height: 6),
                       Row(
@@ -128,7 +128,7 @@ class _VisitationScreenState extends State<VisitationScreen> {
       appBar: AppBar(
         backgroundColor: ungu3,
         leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Aktifitas Kunjungan", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 18)),
+        title: Text("Aktifitas Kunjungan", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 16)),
         centerTitle: true,
         actions: [IconButton(onPressed: filterSearch, icon: Icon(Icons.search, color: Colors.white))],
       ),
@@ -199,16 +199,9 @@ class _VisitationScreenState extends State<VisitationScreen> {
                             child: ExpansionTile(
                               // tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              leading: const Icon(Icons.assignment_outlined),
+                              leading: const Icon(Icons.assignment_outlined, size: 20),
                               title: Row(
-                                children: [
-                                  Expanded(child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 14))),
-                                  // Container(
-                                  //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  //   decoration: BoxDecoration(color: ungu4.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
-                                  //   child: Text(item.visitationStatus!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12, color: ungu4)),
-                                  // ),
-                                ],
+                                children: [Expanded(child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)))],
                               ),
                               children: [
                                 Table(
@@ -217,17 +210,17 @@ class _VisitationScreenState extends State<VisitationScreen> {
                                   children: [
                                     TableRow(
                                       children: [
-                                        const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold')),
-                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold')),
-                                        Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium')),
+                                        const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
+                                        Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                                     TableRow(
                                       children: [
-                                        const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold')),
-                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold')),
-                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium')),
+                                        const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
+                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),

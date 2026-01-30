@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<String> titleMenu = ["Aktifitas Kunjungan"];
   final List<String> routeMenu = [visitationScreen];
   final List<IconData> iconMenu = [Icons.insert_invitation];
-  final List<Color> colorMenu = [Color(0XFFBDE8F5), Color(0XFF9ACBD0), Color(0XFF7A73D1), Color(0XFFFFCFEF)];
+  final List<Color> colorMenu = [Color(0XFF7A73D1), Color(0XFFBDE8F5), Color(0XFF9ACBD0), Color(0XFFFFCFEF)];
   @override
   void initState() {
     super.initState();
@@ -35,26 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteCustom,
-      appBar: AppBar(
-        toolbarHeight: 10,
-        backgroundColor: whiteCustom2,
-        elevation: 0,
-        // title: Text("Sales Force Automation", style: TextStyle(color: ungu3, fontFamily: 'JakartaSansSemiBold', fontSize: 18)),
-        // actions: [
-        //   BlocBuilder<ProfileCubit, ProfileState>(
-        //     builder: (context, state) {
-        //       if (state is ProfileInitial) {
-        //         return SizedBox.shrink();
-        //       }
-        //       if (state is ProfileLoading) {
-        //         return SizedBox.shrink();
-        //       }
-        //       var data = (state as ProfileLoaded).username;
-        //       return Padding(padding: const EdgeInsets.only(right: 8.0), child: Text("Hai, $data", style: TextStyle(color: ungu3, fontSize: 17)));
-        //     },
-        //   ),
-        // ],
-      ),
+      appBar: AppBar(toolbarHeight: 10, backgroundColor: whiteCustom2, elevation: 0),
       body: RefreshIndicator(
         onRefresh: () async {
           BlocProvider.of<GetLastCheckInCubit>(context).getLastCheckIn(context);
@@ -86,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Hai, $username", style: TextStyle(color: Colors.black, fontSize: 15, fontFamily: 'InterSemiBold')),
+                          Text("Hai, $username", style: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'InterSemiBold')),
                           Text(email, style: TextStyle(color: ungu3, fontSize: 12, fontFamily: 'InterMedium')),
                         ],
                       );
@@ -127,15 +108,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         }).toList(),
                   );
                 }
-
-                return const SizedBox(height: 200, child: Center(child: CircularProgressIndicator()));
+                return const SizedBox(height: 160, child: Center(child: CircularProgressIndicator()));
               },
             ),
 
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Text("Today Attendace", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+              child: Text("Today Attendace", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
             ),
             const SizedBox(height: 8),
             BlocBuilder<GetLastCheckInCubit, GetLastCheckInState>(
@@ -162,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Text("Order Control", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+              child: Text("Order Control", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
             ),
             GridView.count(
               shrinkWrap: true,
@@ -218,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Text("Sales Visit Management", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 18)),
+              child: Text("Sales Visit Management", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
             ),
             const SizedBox(height: 12),
             GridView.count(
@@ -244,9 +224,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(iconMenu[index], size: 22),
+                        Icon(iconMenu[index], size: 22, color: Colors.white),
                         const SizedBox(height: 6),
-                        Text(titleMenu[index], textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'InterRegular', fontSize: 12)),
+                        Text(
+                          titleMenu[index],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontFamily: 'InterRegular', fontSize: 12, color: Colors.white),
+                        ),
                       ],
                     ),
                   ),

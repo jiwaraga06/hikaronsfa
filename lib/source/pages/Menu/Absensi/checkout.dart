@@ -294,7 +294,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 280,
-                    decoration: BoxDecoration(color: biru3, borderRadius: BorderRadius.only(topRight: Radius.circular(60), topLeft: Radius.circular(60))),
+                    decoration: BoxDecoration(color: merah, borderRadius: BorderRadius.only(topRight: Radius.circular(60), topLeft: Radius.circular(60))),
                   ),
                 ),
                 Positioned(
@@ -323,12 +323,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   Row(
                                     children: [
                                       const Icon(Icons.location_on, size: 20),
-                                      const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                      const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
                                     ],
                                   ),
                                   AutoSizeText(
                                     "$alamatSaya",
-                                    style: TextStyle(fontFamily: 'InterMedium', fontSize: 13),
+                                    style: TextStyle(fontFamily: 'InterMedium', fontSize: 10),
                                   ),
                                 ],
                               ),
@@ -343,10 +343,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   Row(
                                     children: [
                                       const Icon(Icons.location_on, size: 20),
-                                      const Text('Lokasi Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                      const Text('Lokasi Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
                                     ],
                                   ),
-                                  AutoSizeText(alamatCustomer, style: TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
+                                  AutoSizeText(alamatCustomer, style: TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
                                 ],
                               ),
                             ),
@@ -362,8 +362,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             child: CustomButton2(
                               onTap: prosesCheckout,
                               text: "Check-Out",
-                              backgroundColor: merah,
-                              textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
+                              backgroundColor: merah2,
+                              textStyle: const TextStyle(color: whiteCustom, fontSize: 16, fontFamily: 'InterSemiBold'),
                             ),
                           ),
                         ),

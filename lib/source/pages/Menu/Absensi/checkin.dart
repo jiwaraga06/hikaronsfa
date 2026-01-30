@@ -357,13 +357,10 @@ class _CheckINScreenState extends State<CheckINScreen> {
                                         Row(
                                           children: [
                                             const Icon(Icons.location_on, size: 20),
-                                            const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                            const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
                                           ],
                                         ),
-                                        AutoSizeText(
-                                          "$alamatSaya",
-                                          style: TextStyle(fontFamily: 'InterMedium', fontSize: 13),
-                                        ),
+                                        AutoSizeText("$alamatSaya", style: TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
                                       ],
                                     ),
                                   ),
@@ -377,10 +374,10 @@ class _CheckINScreenState extends State<CheckINScreen> {
                                         Row(
                                           children: [
                                             const Icon(Icons.location_on, size: 20),
-                                            const Text('Lokasi Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                            const Text('Lokasi Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
                                           ],
                                         ),
-                                        AutoSizeText(alamatCustomer, style: TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
+                                        AutoSizeText(alamatCustomer, style: TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
                                       ],
                                     ),
                                   ),
@@ -462,7 +459,7 @@ class _CheckINScreenState extends State<CheckINScreen> {
                                     onTap: prosesCheckin,
                                     text: "Check-In",
                                     backgroundColor: biru,
-                                    textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
+                                    textStyle: const TextStyle(color: whiteCustom, fontSize: 16, fontFamily: 'InterSemiBold'),
                                   ),
                                 ),
                               ),

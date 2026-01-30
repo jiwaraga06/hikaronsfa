@@ -40,7 +40,7 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
       appBar: AppBar(
         backgroundColor: ungu3,
         leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Aktifitas Kunjungan Detail", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 18)),
+        title: Text("Aktifitas Kunjungan Detail", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 16)),
         centerTitle: true,
       ),
       body: BlocBuilder<GetVisitationDetailCubit, GetVisitationDetailState>(
@@ -71,16 +71,16 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                   children: [
                     ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      leading: const Icon(Icons.people_alt),
+                      leading: const Icon(Icons.people_alt, size: 20),
                       title: Row(
                         children: [
-                          Expanded(child: Text(data.order!.customerName!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 14))),
+                          Expanded(child: Text(data.order!.customerName!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 13))),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(color: biru.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
                             child: Text(
                               formatDate2(data.order!.visitationDate!),
-                              style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12, color: biru),
+                              style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 10, color: biru),
                             ),
                           ),
                         ],
@@ -90,7 +90,7 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                       //   style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12, color: visitationStatusColor(data.order!.visitationStatus!)),
                       // ),
                     ),
-                    Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: Text("PIC", style: TextStyle(fontFamily: "InterMedium", fontSize: 16))),
+                    Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: Text("PIC", style: TextStyle(fontFamily: "InterMedium", fontSize: 14))),
                     const SizedBox(height: 6),
                     Padding(
                       padding: const EdgeInsets.only(left: 12, right: 12),
@@ -101,8 +101,8 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                           TableRow(
                             decoration: BoxDecoration(color: grey2),
                             children: const [
-                              Padding(padding: EdgeInsets.all(8), child: Text('Nama PIC', style: TextStyle(fontFamily: 'InterSemiBold'))),
-                              Padding(padding: EdgeInsets.all(8), child: Text('Jabatan', style: TextStyle(fontFamily: 'InterSemiBold'))),
+                              Padding(padding: EdgeInsets.all(8), child: Text('Nama PIC', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
+                              Padding(padding: EdgeInsets.all(8), child: Text('Jabatan', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
                             ],
                           ),
 
@@ -112,11 +112,11 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8),
-                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium')),
+                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 12)),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8),
-                                  child: Text(entry.value.visitationdJabatan ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium')),
+                                  child: Text(entry.value.visitationdJabatan ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 12)),
                                 ),
                               ],
                             ),
@@ -126,37 +126,7 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                     const SizedBox(height: 12),
                     Padding(
                       padding: const EdgeInsets.only(left: 12, right: 12),
-                      child: Text("Bahan Diskusi", style: TextStyle(fontFamily: "InterMedium", fontSize: 16)),
-                    ),
-                    const SizedBox(height: 6),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12, right: 12),
-                      child: Table(
-                        border: TableBorder.all(style: BorderStyle.none),
-                        // columnWidths: const <int, TableColumnWidth>{0: FixedColumnWidth(120), 1: FixedColumnWidth(120)},
-                        children: [
-                          TableRow(
-                            decoration: BoxDecoration(color: grey2),
-                            children: const [Padding(padding: EdgeInsets.all(8), child: Text('Bahan Diskusi', style: TextStyle(fontFamily: 'InterSemiBold')))],
-                          ),
-
-                          for (final entry in data.orderKeteranganDetails.asMap().entries)
-                            TableRow(
-                              decoration: BoxDecoration(color: entry.key.isEven ? whiteCustom2 : grey2),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium')),
-                                ),
-                              ],
-                            ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12, right: 12),
-                      child: Text("Foto Tambahan", style: TextStyle(fontFamily: "InterMedium", fontSize: 16)),
+                      child: Text("Bahan Diskusi", style: TextStyle(fontFamily: "InterMedium", fontSize: 14)),
                     ),
                     const SizedBox(height: 6),
                     Padding(
@@ -168,8 +138,40 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                           TableRow(
                             decoration: BoxDecoration(color: grey2),
                             children: const [
-                              Padding(padding: EdgeInsets.all(8), child: Text('Keterangan', style: TextStyle(fontFamily: 'InterSemiBold'))),
-                              Padding(padding: EdgeInsets.all(8), child: Text('Lampiran', style: TextStyle(fontFamily: 'InterSemiBold'))),
+                              Padding(padding: EdgeInsets.all(8), child: Text('Bahan Diskusi', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
+                            ],
+                          ),
+
+                          for (final entry in data.orderKeteranganDetails.asMap().entries)
+                            TableRow(
+                              decoration: BoxDecoration(color: entry.key.isEven ? whiteCustom2 : grey2),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: Text("Foto Tambahan", style: TextStyle(fontFamily: "InterMedium", fontSize: 14)),
+                    ),
+                    const SizedBox(height: 6),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: Table(
+                        border: TableBorder.all(style: BorderStyle.none),
+                        // columnWidths: const <int, TableColumnWidth>{0: FixedColumnWidth(120), 1: FixedColumnWidth(120)},
+                        children: [
+                          TableRow(
+                            decoration: BoxDecoration(color: grey2),
+                            children: const [
+                              Padding(padding: EdgeInsets.all(8), child: Text('Keterangan', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
+                              Padding(padding: EdgeInsets.all(8), child: Text('Lampiran', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
                             ],
                           ),
 
@@ -179,7 +181,7 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8),
-                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'InterMedium')),
+                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8),

@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: whiteCustom,
       appBar: AppBar(
         backgroundColor: ungu4,
-        title: Text("Profile", style: TextStyle(fontFamily: "InterSemiBold", fontSize: 18, color: Colors.white)),
+        title: Text("Profile", style: TextStyle(fontFamily: "InterSemiBold", fontSize: 14, color: Colors.white)),
         centerTitle: true,
       ),
       body: BlocBuilder<ProfileCubit, ProfileState>(
@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: CircleAvatar(radius: 42, backgroundImage: AssetImage("assets/images/user_avatar.png")),
                         ),
                         const SizedBox(height: 8),
-                        Text(username, style: TextStyle(fontSize: 20, fontFamily: "InterSemiBold")),
+                        Text(username, style: TextStyle(fontSize: 18, fontFamily: "InterSemiBold")),
                       ],
                     ),
                   ),
@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Icon(Icons.mail, color: ungu4),
                               const SizedBox(width: 12),
-                              Text(email, style: TextStyle(fontFamily: "InterMedium", fontSize: 15)),
+                              Text(email, style: TextStyle(fontFamily: "InterMedium", fontSize: 13)),
                             ],
                           ),
                         ],
@@ -107,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 Icon(Icons.logout_outlined, color: merah2),
                                 const SizedBox(width: 12),
-                                const Text("Logout", style: TextStyle(fontFamily: "InterMedium", fontSize: 15)),
+                                const Text("Logout", style: TextStyle(fontFamily: "InterMedium", fontSize: 13)),
                                 const Spacer(),
                                 const Icon(Icons.chevron_right, color: Colors.grey),
                               ],
