@@ -17,8 +17,8 @@ enum AttendanceType { checkIn, checkOut }
 late List<CameraDescription> cameras;
 
 var selectedCustomerType = "C";
-const url = "http://192.168.0.126:8000";
-// const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
+// const url = "http://192.168.0.126:8000"; 
+const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
 // const url = "http://203.210.84.8:9999";
 // const url2 = "https://api-v3.hris.rsuumc.com";
 // const url2 = "https://api-v2.rsuumc.com";
@@ -54,9 +54,14 @@ const navy = Color(0XFF1B3C53);
 const navy2 = Color(0XFF234C6A);
 const biru = Color(0XFF125B9A);
 const biru2 = Color(0XFF000080);
+const biru3 = Color(0XFF4988C4);
+const biru4 = Color(0XFF1C4D8D);
 const amber = Color(0XFFFAB12F);
 const amber2 = Color(0XFFE9762B);
 const ungu = Color(0XFF4D2B8C);
 const ungu2 = Color(0XFF62109F);
 const ungu3 = Color(0XFF393D7E);
-const ungu4 = Color(0XFF4D2FB2);
+const ungu4 = Color(0XFF6D62AD);
+const grey = Color(0XFFBFC6C4);
+const grey2 = Color(0XFFEEEEEE);
+const grey3 = Color(0XFFCBCBCB);

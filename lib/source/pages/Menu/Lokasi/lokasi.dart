@@ -130,28 +130,47 @@ class _LokasiScreenState extends State<LokasiScreen> {
                         ),
                       ],
                     ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: LatLng(latitude, longitude),
-                          width: 150,
-                          height: 80,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.location_pin),
-                              SizedBox(height: 8),
-                              Card(
-                                color: whiteCustom,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                child: Padding(padding: const EdgeInsets.all(8.0), child: Text(place.street!)),
-                              ),
-                            ],
-                          ),
+                    MarkerLayer(markers: [Marker(point: LatLng(latitude, longitude), width: 150, height: 80, child: Icon(Icons.location_pin))]),
+                  ],
+                ),
+                Positioned(
+                  bottom: 12,
+                  right: 18,
+                  left: 18,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 80,
+                    decoration: BoxDecoration(color: whiteCustom, borderRadius: BorderRadius.circular(8)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Table(
+                          border: TableBorder.all(style: BorderStyle.none),
+                          columnWidths: const <int, TableColumnWidth>{0: FixedColumnWidth(30), 1: FixedColumnWidth(300)},
+                          children: [
+                            TableRow(
+                              children: [
+                                const Icon(Icons.location_on, size: 18),
+                                const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'JakartaSansSemiBold', fontSize: 14)),
+                              ],
+                            ),
+                            const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4)]),
+                            TableRow(
+                              children: [
+                                const Icon(Icons.location_on, size: 18, color: Colors.transparent),
+                                AutoSizeText(
+                                  " ${place.street} ,${place.subAdministrativeArea}, ${place.administrativeArea}",
+                                  style: TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 15),
+                                  maxLines: 2,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
                 Positioned(
                   right: 16,
@@ -164,7 +183,8 @@ class _LokasiScreenState extends State<LokasiScreen> {
                         child: const Icon(Icons.add),
                         onPressed: () {
                           setState(() {
-                            currentZoom++;
+                            currentZoom += 1;
+                            mapController.move(mapController.camera.center, currentZoom);
                           });
                         },
                       ),
@@ -175,10 +195,12 @@ class _LokasiScreenState extends State<LokasiScreen> {
                         child: const Icon(Icons.remove),
                         onPressed: () {
                           setState(() {
-                            currentZoom--;
+                            currentZoom -= 1;
+                            mapController.move(mapController.camera.center, currentZoom);
                           });
                         },
                       ),
+
                       FloatingActionButton(
                         heroTag: 'mark',
                         mini: true,
@@ -190,6 +212,7 @@ class _LokasiScreenState extends State<LokasiScreen> {
                     ],
                   ),
                 ),
+
                 Positioned(
                   top: 50,
                   right: 12,
@@ -206,49 +229,19 @@ class _LokasiScreenState extends State<LokasiScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 8),
                         BlocBuilder<GetCustomerCubit, GetCustomerState>(
                           builder: (context, state) {
-                            if (state is GetCustomerLoading) {
-                              return DropdownSearch(
-                                popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
-                                items: [].map((e) => e).toList(),
-                                dropdownDecoratorProps: const DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    // border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                    hintText: "Customer",
-                                    labelText: "Customer",
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              );
-                            }
-                            if (state is GetCustomerLoaded == false) {
-                              return DropdownSearch(
-                                popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
-                                items: [].map((e) => e).toList(),
-                                dropdownDecoratorProps: const DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    // border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                    hintText: "Customer",
-                                    labelText: "Customer",
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              );
-                            }
-                            var data = (state as GetCustomerLoaded).model;
+                            final bool isLoaded = state is GetCustomerLoaded;
+                            // final data = (state as GetCustomerLoaded).model;
+                            final data = isLoaded ? state.model! : [];
+
                             return DropdownSearch(
                               popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
                               items: data.map((e) => e.ptnrName).toList(),
                               dropdownDecoratorProps: const DropDownDecoratorProps(
                                 dropdownSearchDecoration: InputDecoration(
                                   // border: OutlineInputBorder(),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                  // contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                   hintText: "Search Customer",
                                   labelText: "Customer",
                                   labelStyle: TextStyle(color: Colors.black),

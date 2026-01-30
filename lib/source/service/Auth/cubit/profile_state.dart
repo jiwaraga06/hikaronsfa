@@ -8,7 +8,8 @@ final class ProfileInitial extends ProfileState {}
 final class ProfileLoading extends ProfileState {}
 
 final class ProfileLoaded extends ProfileState {
-  final String? username;
+  final String username;
+  final String email;
 
-  ProfileLoaded({required this.username});
+  ProfileLoaded({required this.username, required this.email});
 }

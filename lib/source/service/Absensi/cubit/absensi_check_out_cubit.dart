@@ -20,48 +20,86 @@ class AbsensiCheckOutCubit extends Cubit<AbsensiCheckOutState> {
   void prosesCheckOut(oid, imageFile, latitudePlace, longitudePlace, context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var user_as_sales_id = pref.getString("user_as_sales_id");
+    var radius = pref.getString("radius");
     var tanggal = formatDate(DateTime.now());
     var jam = formatDateToTime(DateTime.now());
+    final responseCustomer = await repository!.lastCheckIn(user_as_sales_id, context);
+    final jsonCustomer = responseCustomer.data;
+    final attndType = jsonCustomer?['data']?['attnd_type'];
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    num distanceInMeters = Geolocator.distanceBetween(position.latitude, position.longitude, latitudePlace, longitudePlace);
-    print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
-    var alamat = await getFullAddress(latitude: position.latitude, longitude: position.longitude);
-    var convertImg = await File(imageFile.path).readAsBytes();
-    var body = FormData.fromMap({
-      "attnd_date_out": "$tanggal",
-      "attnd_time_out": "$jam",
-      "attnd_latitude_out": "${position.latitude}",
-      "attnd_longitude_out": "${position.latitude}",
-      // "attnd_image_out": "checkout2.jpg",
-      // "attnd_image_out": "${imageFile!.path.split('/').last}",
-      // "attnd_image_out": "${base64Encode(convertImg)}",
-      "attnd_image_out": await MultipartFile.fromFile(imageFile!.path, filename: imageFile.name),
-      "attnd_loc_desc_out": "$alamat",
-      "attnd_current_status": "OUT",
-      "user_as_sales_id": "$user_as_sales_id",
-      "attnd_oid": "$oid",
-    });
-    print(body);
-    emit(AbsensiCheckOutLoading());
-    final response = await repository!.checkOUT(body, context);
+    if (attndType == "C") {
+      num distanceInMeters = Geolocator.distanceBetween(position.latitude, position.longitude, latitudePlace, longitudePlace);
+      print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+      var alamat = await getFullAddress(latitude: position.latitude, longitude: position.longitude);
+      // var convertImg = await File(imageFile.path).readAsBytes();
+      var body = FormData.fromMap({
+        "attnd_date_out": "$tanggal",
+        "attnd_time_out": "$jam",
+        "attnd_latitude_out": "${position.latitude}",
+        "attnd_longitude_out": "${position.latitude}",
+        "attnd_image_out": await MultipartFile.fromFile(imageFile!.path, filename: imageFile.name),
+        "attnd_loc_desc_out": "$alamat",
+        "attnd_current_status": "OUT",
+        "user_as_sales_id": "$user_as_sales_id",
+        "attnd_oid": "$oid",
+      });
+      print(body);
+      emit(AbsensiCheckOutLoading());
+      final response = await repository!.checkOUT(body, context);
 
-    if (response == null) {
-      emit(AbsensiCheckOutFailed(statusCode: 500, json: {"message": "Response kosong"}));
-      return;
-    }
-
-    final statusCode = response.statusCode ?? 500;
-    final json = response.data;
-    print("\n CHECK OUT : $json");
-
-    if (statusCode == 200 && json != null && json['data'] != null) {
-      try {
-        emit(AbsensiCheckOutLoaded(statusCode: statusCode, json: json));
-      } catch (e) {
-        emit(AbsensiCheckOutFailed(statusCode: 500, json: {"message": "Gagal parsing lokasi"}));
+      if (response == null) {
+        emit(AbsensiCheckOutFailed(statusCode: 500, json: {"message": "Response kosong"}));
+        return;
+      }
+      final statusCode = response.statusCode ?? 500;
+      final json = response.data;
+      print("\n CHECK OUT : $json");
+      if (distanceInMeters < int.parse(radius!)) {
+        if (statusCode == 200 && json != null && json['data'] != null) {
+          try {
+            emit(AbsensiCheckOutLoaded(statusCode: statusCode, json: json));
+          } catch (e) {
+            emit(AbsensiCheckOutFailed(statusCode: 500, json: {"message": "Gagal parsing lokasi"}));
+          }
+        } else {
+          emit(AbsensiCheckOutFailed(statusCode: statusCode, json: json ?? {"message": "Unknown error"}));
+        }
+      } else {
+        emit(AbsensiCheckOutFailed(statusCode: 500, json: {"message": "Anda berada jauh dari radius : ${distanceInMeters.toStringAsFixed(2)} M"}));
       }
     } else {
-      emit(AbsensiCheckOutFailed(statusCode: statusCode, json: json ?? {"message": "Unknown error"}));
+      var alamat = await getFullAddress(latitude: position.latitude, longitude: position.longitude);
+      // var convertImg = await File(imageFile.path).readAsBytes();
+      var body = FormData.fromMap({
+        "attnd_date_out": "$tanggal",
+        "attnd_time_out": "$jam",
+        "attnd_latitude_out": "${position.latitude}",
+        "attnd_longitude_out": "${position.latitude}",
+        "attnd_image_out": await MultipartFile.fromFile(imageFile!.path, filename: imageFile.name),
+        "attnd_loc_desc_out": "$alamat",
+        "attnd_current_status": "OUT",
+        "user_as_sales_id": "$user_as_sales_id",
+        "attnd_oid": "$oid",
+      });
+      emit(AbsensiCheckOutLoading());
+      final response = await repository!.checkOUT(body, context);
+
+      if (response == null) {
+        emit(AbsensiCheckOutFailed(statusCode: 500, json: {"message": "Response kosong"}));
+        return;
+      }
+      final statusCode = response.statusCode ?? 500;
+      final json = response.data;
+      print("\n CHECK OUT : $json");
+      if (statusCode == 200 && json != null && json['data'] != null) {
+        try {
+          emit(AbsensiCheckOutLoaded(statusCode: statusCode, json: json));
+        } catch (e) {
+          emit(AbsensiCheckOutFailed(statusCode: 500, json: {"message": "Gagal parsing lokasi"}));
+        }
+      } else {
+        emit(AbsensiCheckOutFailed(statusCode: statusCode, json: json ?? {"message": "Unknown error"}));
+      }
     }
   }
 }

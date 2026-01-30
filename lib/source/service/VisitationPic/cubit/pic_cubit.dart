@@ -11,14 +11,14 @@ class PicCubit extends Cubit<PicState> {
 
   void clearData() {
     modelEntryPIC.clear();
+    emit(PicLoaded(model: List.from(modelEntryPIC)));
   }
 
   void loadData() {
     emit(PicLoaded(model: List.from(modelEntryPIC)));
   }
 
-  void addAllData(String visitationdRemarks, String visitationdJabatan, String visitationd_VisitationOid, String visitationOid) {
-    
+  void addAllData({String? visitationdRemarks, String? visitationdJabatan, String? visitationd_VisitationOid, String? visitationOid}) {
     modelEntryPIC.add(
       ModelEntryPIC(
         visitationdVisitationOid: visitationd_VisitationOid,

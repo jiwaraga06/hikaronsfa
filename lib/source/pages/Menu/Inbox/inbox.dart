@@ -10,6 +10,13 @@ class InboxScreen extends StatefulWidget {
 class _InboxScreenState extends State<InboxScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      backgroundColor: whiteCustom,
+      appBar: AppBar(
+      backgroundColor: whiteCustom,
+      centerTitle: true,
+        title: Text("Notification"),
+      ),
+    );
   }
 }

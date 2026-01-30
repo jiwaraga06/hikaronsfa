@@ -4,7 +4,7 @@ import 'package:hikaronsfa/source/env/env.dart';
 class CustomField2 extends StatelessWidget {
   final TextEditingController? controller;
   final String? hintText, labelText, messageError, initialValue;
-  final bool readOnly, hidePassword;
+  final bool readOnly, hidePassword, obscureText;
   final Widget? preffixIcon, suffixIcon;
   final VoidCallback? onTap;
   final int maxLines;
@@ -19,6 +19,7 @@ class CustomField2 extends StatelessWidget {
     this.messageError,
     this.readOnly = false,
     this.hidePassword = false,
+    this.obscureText = false,
     this.preffixIcon,
     this.suffixIcon,
     this.controller,
@@ -34,11 +35,11 @@ class CustomField2 extends StatelessWidget {
       controller: controller,
       initialValue: controller == null ? initialValue : null,
       readOnly: readOnly,
-      obscureText: hidePassword,
+      obscureText: obscureText,
       keyboardType: keyboardType,
       maxLines: maxLines,
       onTap: onTap,
-      style: textStyle ?? const TextStyle(fontFamily: 'MontserratMedium', fontSize: 14),
+      style: textStyle ?? const TextStyle(fontFamily: 'InterMedium', fontSize: 14),
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,
@@ -49,14 +50,14 @@ class CustomField2 extends StatelessWidget {
         filled: true,
         fillColor: Colors.grey.shade50,
 
-        hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 13, fontFamily: 'JakartaSansMedium'),
-        labelStyle: TextStyle(color: Colors.grey.shade700, fontSize: 13, fontFamily: 'JakartaSansMedium'),
+        hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 13, fontFamily: 'InterMedium'),
+        labelStyle: TextStyle(color: Colors.grey.shade700, fontSize: 13, fontFamily: 'InterMedium'),
 
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
 
         border: outlineBorder(Colors.grey.shade300),
         enabledBorder: outlineBorder(Colors.grey.shade300),
-        focusedBorder: outlineBorder(ungu),
+        focusedBorder: outlineBorder(biru),
         errorBorder: outlineBorder(merah),
         focusedErrorBorder: outlineBorder(merah),
       ),
@@ -70,6 +71,6 @@ class CustomField2 extends StatelessWidget {
   }
 
   OutlineInputBorder outlineBorder(Color color) {
-    return OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: color, width: 1.2));
+    return OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: color, width: 1.2));
   }
 }

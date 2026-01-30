@@ -17,8 +17,19 @@ class DiscussFormPage extends StatefulWidget {
 }
 
 class _DiscussFormPageState extends State<DiscussFormPage> {
-  final remarkCtrl = TextEditingController();
   final formkey = GlobalKey<FormState>();
+  final remarkCtrl = TextEditingController();
+
+  void submit(isEdit) {
+    if (formkey.currentState!.validate()) {
+      if (isEdit) {
+        context.read<DiscussCubit>().editData(widget.data!.visitationdOid!, remarkCtrl.text);
+      } else {
+        context.read<DiscussCubit>().addData(remarkCtrl.text);
+      }
+      Navigator.pop(context);
+    }
+  }
 
   @override
   void initState() {
@@ -33,33 +44,56 @@ class _DiscussFormPageState extends State<DiscussFormPage> {
     final isEdit = widget.data != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? 'Edit Discuss' : 'Tambah Discuss')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: formkey,
-          child: Column(
-            children: [
-              CustomField2(controller: remarkCtrl, hintText: "Masukan Remark", labelText: "Remark", messageError: "Kolom harus di isi"),
-              const SizedBox(height: 20),
-              CustomButton(
-                onTap: () {
-                  if (formkey.currentState!.validate()) {
-                    if (isEdit) {
-                      context.read<DiscussCubit>().editData(widget.data!.visitationdOid!, remarkCtrl.text);
-                    } else {
-                      context.read<DiscussCubit>().addData(remarkCtrl.text);
-                    }
-                    Navigator.pop(context);
-                  }
-                },
-                text: isEdit ? 'Update' : 'Simpan',
-                backgroundColor: biru,
-                textStyle: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'JakartaSansMedium'),
+      backgroundColor: whiteCustom,
+      appBar: AppBar(
+        title: Text(isEdit ? 'Ubah Diskusi' : 'Tambah Diskusi Baru', style: TextStyle(fontFamily: "InterSemiBold")),
+        centerTitle: true,
+        backgroundColor: whiteCustom2,
+      ),
+      body: CustomScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(8),
+            sliver: SliverToBoxAdapter(
+              child: Ink(
+                color: whiteCustom2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: formkey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Bahan Diskusi", style: TextStyle(fontFamily: "InterMedium")),
+                        const SizedBox(height: 6),
+                        CustomField2(controller: remarkCtrl, hintText: "Masukan Bahan Diskusi", messageError: "Kolom harus di isi"),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ],
+            ),
           ),
-        ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Spacer(),
+                  CustomButton(
+                    onTap: () => submit(isEdit),
+                    height: 45,
+                    text: isEdit ? 'Update' : 'Simpan',
+                    backgroundColor: biru,
+                    textStyle: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'InterMedium'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

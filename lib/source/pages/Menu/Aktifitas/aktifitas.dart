@@ -10,6 +10,13 @@ class AktifitasScreen extends StatefulWidget {
 class _AktifitasScreenState extends State<AktifitasScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      backgroundColor: whiteCustom,
+      appBar: AppBar(
+      backgroundColor: whiteCustom,
+        centerTitle: true,
+        title: Text('Aktifitas'),
+      ),
+    );
   }
 }

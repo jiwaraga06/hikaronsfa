@@ -14,3 +14,10 @@ String formatDate2(DateTime time) {
   );
   return formattedTime;
 }
+String formatDate3(DateTime time) {
+  final now = DateTime.now();
+  final formattedTime = DateFormat('dd MMM yyyy').format(
+    DateTime(time.year, time.month, time.day, time.hour, time.minute),
+  );
+  return formattedTime;
+}

@@ -13,6 +13,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   XFile? imageFile;
   double? latitudePlace = 0.0;
   double? longitudePlace = 0.0;
+  String alamatCustomer = "";
+  void getLocationCust(customerId) {
+    BlocProvider.of<GetLocationCustomerCubit>(context).getLocationCustomer(customerId, context);
+  }
+
+  void distancePlace() {
+    BlocProvider.of<DistanceLocationCubit>(context).getDistance(latitudePlace, longitudePlace);
+  }
+
   void takePicture() async {
     try {
       final XFile picture = await cameraController!.takePicture();
@@ -27,17 +36,21 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     }
   }
 
-  void getLocationCust(customerId) {
-    BlocProvider.of<GetLocationCustomerCubit>(context).getLocationCustomer(customerId, context);
-  }
-
-  void distancePlace() {
-    BlocProvider.of<DistanceLocationCubit>(context).getDistance(latitudePlace, longitudePlace);
-  }
-
   void prosesCheckout() async {
     takePicture();
     await Future.delayed(Duration(seconds: 1));
+    // if (imageFile == null) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text('Silakan ambil foto terlebih dahulu', style: TextStyle(color: Colors.white)),
+    //       backgroundColor: Colors.red,
+    //       behavior: SnackBarBehavior.floating,
+    //       duration: Duration(seconds: 2),
+    //     ),
+    //   );
+    //   return;
+    // }
+
     BlocProvider.of<AbsensiCheckOutCubit>(context).prosesCheckOut(oid_uuid, imageFile, latitudePlace, longitudePlace, context);
   }
 
@@ -45,7 +58,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   void initState() {
     super.initState();
     print(selectedCustomerType);
-    BlocProvider.of<GetLastCheckInCubit>(context).getLastCheckIn(selectedCustomerType, context);
+    BlocProvider.of<GetLastCheckInCubit>(context).getLastCheckIn(context);
     BlocProvider.of<MarkerLocationCubit>(context).getCurrentLocation();
     mapController = MapController();
     cameraController = CameraController(cameras[1], ResolutionPreset.max);
@@ -73,20 +86,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   @override
   void dispose() {
-    cameraController!.dispose();
-    mapController.dispose();
     super.dispose();
+    // mapController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: merah,
-        leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Check-Out", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-      ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<GetLocationCustomerCubit, GetLocationCustomerState>(
@@ -102,6 +108,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 setState(() {
                   latitudePlace = state.latitudePlace;
                   longitudePlace = state.longitudePlace;
+                  alamatCustomer = state.json['alamat'];
                 });
               }
             },
@@ -147,264 +154,226 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 var json = state.json;
                 MyDialog.dialogSuccess2(context, json['message']);
                 Navigator.pushNamedAndRemoveUntil(context, dashboardScreen, (route) => false);
-                BlocProvider.of<GetLastCheckInCubit>(context).getLastCheckIn(selectedCustomerType, context);
+                BlocProvider.of<GetLastCheckInCubit>(context).getLastCheckIn(context);
               }
             },
           ),
         ],
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.5,
-                  padding: const EdgeInsets.all(6),
-                  children: [
-                    // ================= MAP (KIRI) =================
-                    BlocBuilder<MarkerLocationCubit, MarkerLocationState>(
-                      builder: (context, state) {
-                        if (state is MarkerLocationLoading) {
-                          return const Center(child: CupertinoActivityIndicator());
-                        }
-                        if (state is MarkerLocationFailed) {
-                          return Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Text(state.message)],
-                            ),
-                          );
-                        }
-                        if (state is MarkerLocationLoaded == false) {
-                          return const Center(child: CupertinoActivityIndicator());
-                        }
-                        var latitude = (state as MarkerLocationLoaded).latitude!;
-                        var longitude = (state).longitude!;
-                        var place = (state).myPlacement![0];
-                        return Container(
-                          margin: const EdgeInsets.all(6),
-                          child: Stack(
+        child: BlocBuilder<MarkerLocationCubit, MarkerLocationState>(
+          builder: (context, state) {
+            if (state is MarkerLocationLoading) {
+              return const Center(child: CupertinoActivityIndicator());
+            }
+            if (state is MarkerLocationFailed) {
+              return Center(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [Text(state.message)]),
+              );
+            }
+            if (state is MarkerLocationLoaded == false) {
+              return const Center();
+            }
+            var latitude = (state as MarkerLocationLoaded).latitude!;
+            var longitude = (state).longitude!;
+            var place = (state).myPlacement![0];
+            var alamatSaya = (state).alamatSaya;
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: FlutterMap(
+                    mapController: mapController,
+                    options: MapOptions(initialCenter: LatLng(latitude, longitude), initialZoom: 15),
+                    children: [
+                      TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'dev.fleaflet.flutter_map.example'),
+
+                      // LOKASI USER
+                      CircleLayer(
+                        circles: [
+                          CircleMarker(
+                            point: LatLng(latitude, longitude),
+                            radius: 250,
+                            useRadiusInMeter: true,
+                            color: Colors.blue[200]!.withOpacity(0.5),
+                            borderColor: Colors.blue.withOpacity(0.5),
+                            borderStrokeWidth: 2,
+                          ),
+                        ],
+                      ),
+                      MarkerLayer(markers: [Marker(point: LatLng(latitude, longitude), width: 150, height: 80, child: Icon(Icons.location_pin))]),
+                      // LOKASI CUSTOMER
+                      BlocBuilder<GetLocationCustomerCubit, GetLocationCustomerState>(
+                        builder: (context, state) {
+                          if (state is! GetLocationCustomerLoaded) {
+                            return const SizedBox.shrink();
+                          }
+
+                          final lat = state.latitudePlace!;
+                          final lng = state.longitudePlace!;
+
+                          return Stack(
                             children: [
-                              FlutterMap(
-                                mapController: mapController,
-                                options: MapOptions(initialCenter: LatLng(latitude, longitude), initialZoom: 15),
-                                children: [
-                                  TileLayer(
-                                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                    userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                                  ),
-                                  // LOKASI USER
-                                  CircleLayer(
-                                    circles: [
-                                      CircleMarker(
-                                        point: LatLng(latitude, longitude),
-                                        radius: 250,
-                                        useRadiusInMeter: true,
-                                        color: Colors.blue[200]!.withOpacity(0.5),
-                                        borderColor: Colors.blue.withOpacity(0.5),
-                                        borderStrokeWidth: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  MarkerLayer(
-                                    markers: [
-                                      Marker(
-                                        point: LatLng(latitude, longitude),
-                                        width: 150,
-                                        child: Column(
-                                          children: [
-                                            Icon(Icons.location_pin),
-                                            SizedBox(height: 4),
-                                            // Card(
-                                            //   color: whiteCustom,
-                                            //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                            //   child: Padding(padding: const EdgeInsets.all(8.0), child: AutoSizeText("place.street", maxLines: 3)),
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                              CircleLayer(
+                                circles: [
+                                  CircleMarker(
+                                    point: LatLng(lat, lng),
+                                    radius: 250,
+                                    useRadiusInMeter: true,
+                                    color: Colors.blue.withOpacity(0.3),
+                                    borderColor: Colors.blue.withOpacity(0.6),
+                                    borderStrokeWidth: 2,
                                   ),
                                 ],
                               ),
-                              Positioned(right: 16, bottom: 100, child: Column(children: [
-                                             
-                                              
-                                            ],
-                                          )),
+                              MarkerLayer(
+                                markers: [
+                                  Marker(point: LatLng(lat, lng), width: 40, height: 40, child: const Icon(Icons.location_pin, color: Colors.red, size: 40)),
+                                ],
+                              ),
                             ],
-                          ),
-                        );
-                      },
-                    ),
-
-                    // ================= CAMERA (KANAN) =================
-                    Container(
-                      color: Colors.black,
-                      margin: const EdgeInsets.all(6),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 70,
+                  right: 18,
+                  child: Container(
+                    width: 140,
+                    height: 220,
+                    margin: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(12)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
                       child:
                           cameraController != null && cameraController!.value.isInitialized
                               ? CameraPreview(cameraController!)
                               : const Center(child: CircularProgressIndicator(color: Colors.white)),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: whiteCustom, border: Border.all(color: ungu, width: 2), borderRadius: BorderRadius.circular(8)),
-                child: BlocBuilder<GetLastCheckInCubit, GetLastCheckInState>(
-                  builder: (context, state) {
-                    String customerName = '-';
-                    String checkIn = '-';
-                    String status = '-';
 
-                    if (state is GetLastCheckInLoading) {
-                      customerName = 'Loading...';
-                      checkIn = 'Loading...';
-                      status = 'Loading...';
-                    } else if (state is GetLastCheckInLoaded) {
-                      var json = state.model!;
-                      customerName = json.attndCustName ?? '-';
-                      checkIn = json.attndTimeIn ?? '-';
-                      status = json.attndCurrentStatus ?? '-';
-                    } else if (state is GetLastCheckInFailed) {
-                      customerName = 'Error';
-                      checkIn = 'Error';
-                      status = 'Error';
-                    }
-
-                    return Table(
-                      border: TableBorder.all(style: BorderStyle.none),
-                      columnWidths: const {0: FixedColumnWidth(150), 1: FixedColumnWidth(15)},
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  left: 0,
+                  child: Container(
+                    width: double.infinity,
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.black54, Colors.black26, Colors.transparent, Colors.transparent],
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TableRow(
-                          children: [
-                            const Text('Customer Name', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                            const Text(':', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                            Text(customerName, style: const TextStyle(fontFamily: 'JakartaSansMedium')),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.replay_circle_filled_outlined, size: 30)),
                         ),
-                        const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
-                        TableRow(
-                          children: [
-                            const Text('Check IN', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                            const Text(':', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                            Text(checkIn, style: const TextStyle(fontFamily: 'JakartaSansMedium')),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: IconButton(
+                            onPressed: () {
+                              BlocProvider.of<MarkerLocationCubit>(context).getCurrentLocation();
+                            },
+                            icon: Icon(Icons.change_circle_sharp, size: 30),
+                          ),
                         ),
-                        const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
-                        TableRow(
-                          children: [
-                            const Text('Status', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                            const Text(':', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                            Text(status, style: const TextStyle(fontFamily: 'JakartaSansMedium')),
-                          ],
-                        ),
-                        const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                       ],
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      height: 150,
-                      margin: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.black.withOpacity(0.3), width: 1),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: BlocBuilder<GetLocationCustomerCubit, GetLocationCustomerState>(
-                        builder: (context, state) {
-                          if (state is GetLocationCustomerInitial) {
-                            return Container();
-                          }
-                          if (state is GetLocationCustomerLoading) {
-                            return const Center(child: CupertinoActivityIndicator());
-                          }
-                          if (state is GetLocationCustomerFailed) {
-                            return Center();
-                          }
-                          if (state is GetLocationCustomerLoaded == false) {
-                            return const Center(child: CupertinoActivityIndicator());
-                          }
-                          var json = (state as GetLocationCustomerLoaded).json;
-
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [AutoSizeText(json['alamat'])]),
-                          );
-                        },
-                      ),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      height: 150,
-                      margin: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.black.withOpacity(0.3), width: 1),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: BlocBuilder<MarkerLocationCubit, MarkerLocationState>(
-                        builder: (context, state) {
-                          if (state is MarkerLocationLoading) {
-                            return const Center(child: CupertinoActivityIndicator());
-                          }
-                          if (state is MarkerLocationFailed) {
-                            return Center(
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 280,
+                    decoration: BoxDecoration(color: biru3, borderRadius: BorderRadius.only(topRight: Radius.circular(60), topLeft: Radius.circular(60))),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 24,
+                  left: 24,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 320,
+                    padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
+                    decoration: BoxDecoration(color: whiteCustom, borderRadius: BorderRadius.only(topRight: Radius.circular(60), topLeft: Radius.circular(60))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 2,
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [Text(state.message)],
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.location_on, size: 20),
+                                      const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                    ],
+                                  ),
+                                  AutoSizeText(
+                                    "$alamatSaya",
+                                    style: TextStyle(fontFamily: 'InterMedium', fontSize: 13),
+                                  ),
+                                ],
                               ),
-                            );
-                          }
-                          if (state is MarkerLocationLoaded == false) {
-                            return const Center(child: CupertinoActivityIndicator());
-                          }
-                          var latitude = (state as MarkerLocationLoaded).latitude!;
-                          var longitude = (state).longitude!;
-                          var place = (state).myPlacement![0];
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [AutoSizeText(place.street!)]),
-                          );
-                        },
-                      ),
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              flex: 2,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.location_on, size: 20),
+                                      const Text('Lokasi Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                    ],
+                                  ),
+                                  AutoSizeText(alamatCustomer, style: TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 45,
+                            width: double.infinity,
+                            child: CustomButton2(
+                              onTap: prosesCheckout,
+                              text: "Check-Out",
+                              backgroundColor: merah,
+                              textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 45,
-                  width: MediaQuery.of(context).size.width,
-                  child: CustomButton(
-                    onTap: prosesCheckout,
-                    text: "Check-Out",
-                    icon: Icons.camera_alt,
-                    backgroundColor: merah,
-                    textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
-                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          },
         ),
       ),
     );

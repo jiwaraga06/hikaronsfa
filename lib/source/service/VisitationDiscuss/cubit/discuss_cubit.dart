@@ -13,11 +13,13 @@ class DiscussCubit extends Cubit<DiscussState> {
 
   void clearData() {
     modelEntryDiscuss.clear();
+    emit(DiscussLoaded(model: List.from(modelEntryDiscuss)));
   }
 
-  void addAllData(String visitationdRemarks, String visitationd_VisitationOid, String visitationOid) {
-    
-    modelEntryDiscuss.add(ModelEntryDiscuss(visitationdVisitationOid: visitationd_VisitationOid, visitationdOid: visitationOid, visitationdRemarks: visitationdRemarks));
+  void addAllData({String? visitationdRemarks, String? visitationd_VisitationOid, String? visitationOid}) {
+    modelEntryDiscuss.add(
+      ModelEntryDiscuss(visitationdVisitationOid: visitationd_VisitationOid, visitationdOid: visitationOid, visitationdRemarks: visitationdRemarks),
+    );
     emit(DiscussLoaded(model: List.from(modelEntryDiscuss)));
   }
 

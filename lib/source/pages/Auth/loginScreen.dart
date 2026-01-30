@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteCustom,
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) async {
           if (state is AuthLoading) {
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           if (state is AuthLoaded) {
             // var data = state.json;
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
           }
         },
         child: Center(
@@ -51,37 +52,41 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset('assets/images/hikaron.jpg', height: 30),
+                  Center(child: Image.asset('assets/images/hikaron.jpg', height: 30)),
+                  const SizedBox(height: 12),
+                  Center(child: Text("Sign in to my account", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16))),
                   const SizedBox(height: 30),
-                  CustomField(
+                  const Text("Username", style: TextStyle(fontFamily: "InterRegular")),
+                  const SizedBox(height: 6),
+                  CustomField2(
                     controller: controllerUsername,
                     keyboardType: TextInputType.name,
                     preffixIcon: const Icon(Icons.account_circle),
-                    hintText: "Masukan Usename",
+                    hintText: "Please insert Username",
                     messageError: "Please fill this field",
                   ),
-                  const SizedBox(height: 20),
-                  CustomField(
+                  const SizedBox(height: 12),
+                  const Text("Password", style: TextStyle(fontFamily: "InterRegular")),
+                  const SizedBox(height: 6),
+                  CustomField2(
                     controller: controllerPassword,
-                    hidePassword: hidePassword,
-                    maxline: 1,
                     preffixIcon: const Icon(Icons.lock),
+                    obscureText: hidePassword,
                     suffixIcon: InkWell(onTap: handlePassword, child: hidePassword ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off)),
-                    hintText: "Masukan Password",
+                    hintText: "Please Insert Password",
                     messageError: "Please fill this field",
                   ),
                   const SizedBox(height: 50),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 48,
-                    child: CustomButton2(
+                    child: CustomButton(
                       onTap: login,
-                      text: "Masuk",
-                      backgroundColor: ungu,
-                      textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
-                      roundedRectangleBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                      text: "Sign In",
+                      backgroundColor: ungu3,
+                      textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'InterSemiBold'),
                     ),
                   ),
                 ],

@@ -24,8 +24,7 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
 
   void prosesCheckIn(customerid, customername, noncustomername, customerType, latitudePlace, longitudePlace, XFile? imageFile, context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    var user_id = pref.getString("user_id");
-    var user_name = pref.getString("user_name");
+    var radius = pref.getString("radius");
     var user_as_sales_id = pref.getString("user_as_sales_id");
     var tanggal = formatDate(DateTime.now());
     var jam = formatDateToTime(DateTime.now());
@@ -58,7 +57,7 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
         "attnd_current_status": "IN",
       });
       print(body.files);
-      if (distanceInMeters < 100000) {
+      if (distanceInMeters < int.parse(radius!)) {
         repository!.checkIN(body, context).then((value) {
           var json = value.data;
           var statusCode = value.statusCode;
@@ -69,7 +68,7 @@ class AbsensiCheckInCubit extends Cubit<AbsensiCheckInState> {
             emit(AbsensiCheckInFailed(statusCode: statusCode, json: json));
           }
         });
-      } else if (distanceInMeters > 1000) {
+      } else if (distanceInMeters > int.parse(radius!)) {
         emit(AbsensiCheckInFailed(statusCode: 0, json: {"message": "Anda berada jauh dari radius : ${distanceInMeters.toStringAsFixed(2)} M"}));
         // MyDialog.dialogAlert2(context, "Anda berada jauh dari radius : ${distanceInMeters.toStringAsFixed(2)} M");
         // EasyLoading.showInfo("tidak : $distanceInMeters");

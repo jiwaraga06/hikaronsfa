@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:hikaronsfa/source/env/env.dart';
 
 class MyDialog {
   static dialogLoading(context) {
@@ -7,7 +8,11 @@ class MyDialog {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return const AlertDialog(content: Row(children: [CircularProgressIndicator(color: Colors.blue), SizedBox(width: 20), Text("Loading...")]));
+        return const AlertDialog(
+          content: Row(
+            children: [CircularProgressIndicator(color: biru3), SizedBox(width: 20), Text("Loading...", style: TextStyle(fontFamily: "InterMedium"))],
+          ),
+        );
       },
     );
   }
@@ -21,13 +26,16 @@ class MyDialog {
       desc: '$message',
       btnCancelOnPress: () {},
       btnOkOnPress: () {},
+      titleTextStyle: TextStyle(fontFamily: "InterSemiBold"),
+      descTextStyle: TextStyle(fontFamily: "InterMedium"),
     )..show();
   }
+
   static dialogAlertList(context, list_error) {
     final Map<String, dynamic> errors = list_error;
     List<String> errorMessages = [];
-    errors.forEach((key, value){
-      if(value is List){
+    errors.forEach((key, value) {
+      if (value is List) {
         errorMessages.addAll(value.map((e) => e.toString()));
       }
     });
@@ -39,6 +47,8 @@ class MyDialog {
       desc: '$errorMessages',
       btnCancelOnPress: () {},
       btnOkOnPress: () {},
+      titleTextStyle: TextStyle(fontFamily: "InterSemiBold"),
+      descTextStyle: TextStyle(fontFamily: "InterMedium"),
     )..show();
   }
 
@@ -52,6 +62,8 @@ class MyDialog {
       title: 'Success',
       desc: '$message',
       btnOkOnPress: onPressedOk,
+      titleTextStyle: TextStyle(fontFamily: "InterSemiBold"),
+      descTextStyle: TextStyle(fontFamily: "InterMedium"),
     )..show();
   }
 
@@ -65,6 +77,8 @@ class MyDialog {
       title: 'Success',
       desc: '$message',
       btnOkOnPress: () {},
+      titleTextStyle: TextStyle(fontFamily: "InterSemiBold"),
+      descTextStyle: TextStyle(fontFamily: "InterMedium"),
     )..show();
   }
 
@@ -79,6 +93,8 @@ class MyDialog {
       desc: '$message',
       btnCancelOnPress: () {},
       btnOkOnPress: onPressedOk,
+      titleTextStyle: TextStyle(fontFamily: "InterSemiBold"),
+      descTextStyle: TextStyle(fontFamily: "InterMedium"),
     )..show();
   }
 
@@ -91,6 +107,8 @@ class MyDialog {
       desc: '$message',
       btnCancelOnPress: onPressedCancel,
       btnOkOnPress: onPressedOk,
+      titleTextStyle: TextStyle(fontFamily: "InterSemiBold"),
+      descTextStyle: TextStyle(fontFamily: "InterMedium"),
     )..show();
   }
 }

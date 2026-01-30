@@ -65,6 +65,7 @@ dependencies:
   uuid: ^4.5.2
   expansion_tile_list: ^2.0.0
   advanced_searchable_dropdown: ^2.1.0
+  carousel_slider: ^5.1.1
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +94,24 @@ flutter:
   - assets/ca/lets-encrypt-r3.pem
   - assets/images/hikaron.jpg
   - assets/images/hikaron copy.jpg
+  - assets/images/AccountMale.png
+  - assets/images/Home.png
+  - assets/images/HomeGrey.png
+  - assets/images/Calendar.png
+  - assets/images/CalendarGrey.png
+  - assets/images/Alarm.png
+  - assets/images/AlarmGrey.png
+  - assets/images/People.png
+  - assets/images/PeopleGrey.png
+  - assets/images/Dashboard.png
+  - assets/images/user_avatar.png
+  - assets/images/Buy.png
+  - assets/images/Clipboard.png
+  # BANNER
+  - assets/banner/1.png
+  - assets/banner/2.png
+  - assets/banner/3.png
+  - assets/banner/about-us.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
@@ -135,6 +154,18 @@ flutter:
     - family: JakartaSansBold
       fonts:
         - asset: assets/fonts/JakartaSans/PlusJakartaSans-Bold.ttf
+    - family: InterRegular
+      fonts:
+        - asset: assets/fonts/Inter/Inter-Regular.otf
+    - family: InterSemiBold
+      fonts:
+        - asset: assets/fonts/Inter/Inter-SemiBold.otf
+    - family: InterMedium
+      fonts:
+        - asset: assets/fonts/Inter/Inter-Medium.otf
+    - family: InterBold
+      fonts:
+        - asset: assets/fonts/Inter/Inter-Bold.otf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

@@ -40,14 +40,97 @@ class _VisitationScreenState extends State<VisitationScreen> {
     BlocProvider.of<DeleteVisitationCubit>(context).deleteVisitation(visitationOid, attndOid, context);
   }
 
+  void setDate() {
+    setState(() {
+      controllerTanggalAwal = TextEditingController(text: tanggal);
+      controllerTanggalAkhir = TextEditingController(text: tanggal);
+    });
+  }
+
+  void filterSearch() {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Filter",
+      barrierColor: Colors.black.withOpacity(0.3),
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (_, __, ___) {
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Filter Tanggal', style: TextStyle(fontSize: 16, fontFamily: 'InterSemiBold')),
+                            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                  
+                      Row(children: const [Expanded(child: Text('Start Date')), SizedBox(width: 12), Expanded(child: Text('End Date'))]),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Expanded(child: CustomField2(controller: controllerTanggalAwal, onTap: pilihTanggalAwal, readOnly: true)),
+                          const SizedBox(width: 12),
+                          Expanded(child: CustomField2(controller: controllerTanggalAkhir, onTap: pilihTanggalAkhir, readOnly: true)),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 42,
+                        child: CustomButton2(
+                          onTap: getVisitation,
+                          backgroundColor: amber2,
+                          text: "Refresh",
+                          textStyle: const TextStyle(color: whiteCustom2, fontFamily: "InterSemiBold", fontSize: 16),
+                          roundedRectangleBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return Transform.scale(scale: Curves.easeOutBack.transform(anim.value), child: Opacity(opacity: anim.value, child: child));
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setDate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteCustom,
       appBar: AppBar(
         backgroundColor: ungu3,
         leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Aktifitas Kunjungan", style: TextStyle(color: Colors.white)),
+        title: Text("Aktifitas Kunjungan", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 18)),
         centerTitle: true,
+        actions: [IconButton(onPressed: filterSearch, icon: Icon(Icons.search, color: Colors.white))],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: hijauDark3,
@@ -75,65 +158,6 @@ class _VisitationScreenState extends State<VisitationScreen> {
         },
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: whiteCustom2,
-                border: Border.all(color: ungu4, width: 2),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 2, spreadRadius: 1, offset: const Offset(0, 1))],
-              ),
-              child: Column(
-                children: [
-                  Row(children: [Expanded(flex: 2, child: Text("Startdate")), const SizedBox(width: 8), Expanded(flex: 2, child: Text("Enddate"))]),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: 35,
-                          child: CustomField(
-                            readOnly: true,
-                            controller: controllerTanggalAwal,
-                            onTap: pilihTanggalAwal,
-                            suffixIcon: const Icon(Icons.calendar_month_outlined),
-                            textstyle: const TextStyle(fontFamily: 'JakartaSansSemiBold', fontSize: 14),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: 35,
-                          child: CustomField(
-                            readOnly: true,
-                            controller: controllerTanggalAkhir,
-                            onTap: pilihTanggalAkhir,
-                            suffixIcon: const Icon(Icons.calendar_month_outlined),
-                            textstyle: const TextStyle(fontFamily: 'JakartaSansSemiBold', fontSize: 14),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: CustomButton2(
-                      onTap: getVisitation,
-                      backgroundColor: amber2,
-                      text: "Refresh",
-                      textStyle: TextStyle(color: Colors.black, fontFamily: "JakartaSansSemiBold", fontSize: 16),
-                      roundedRectangleBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
             Expanded(
               child: BlocBuilder<GetVisitationCubit, GetVisitationState>(
                 builder: (context, state) {
@@ -145,14 +169,12 @@ class _VisitationScreenState extends State<VisitationScreen> {
                   // ❌ ERROR
                   if (state is GetVisitationFailed) {
                     var json = state.json;
-                    return Center(child: Text(json['message'], style: const TextStyle(fontFamily: 'JakartaSansMedium', color: Colors.red)));
+                    return Center(child: Text(json['message'], style: const TextStyle(fontFamily: 'InterMedium', color: Colors.red)));
                   }
 
                   // 📭 DATA KOSONG
                   if (state is GetVisitationLoaded == false) {
-                    return const Center(
-                      child: Text("Data tidak ditemukan", style: TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 14, color: Colors.grey)),
-                    );
+                    return const Center(child: Text("Data tidak ditemukan", style: TextStyle(fontFamily: 'InterMedium', fontSize: 14, color: Colors.grey)));
                   }
 
                   // 📋 ADA DATA
@@ -166,7 +188,7 @@ class _VisitationScreenState extends State<VisitationScreen> {
                       itemBuilder: (context, index) {
                         final item = data[index];
                         return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          // margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -175,17 +197,17 @@ class _VisitationScreenState extends State<VisitationScreen> {
                           child: Theme(
                             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                             child: ExpansionTile(
-                              tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              // tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               leading: const Icon(Icons.assignment_outlined),
                               title: Row(
                                 children: [
-                                  Expanded(child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'JakartaSansSemiBold', fontSize: 14))),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(color: ungu4.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
-                                    child: Text(item.visitationStatus!, style: const TextStyle(fontFamily: 'JakartaSansSemiBold', fontSize: 12, color: ungu4)),
-                                  ),
+                                  Expanded(child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 14))),
+                                  // Container(
+                                  //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  //   decoration: BoxDecoration(color: ungu4.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
+                                  //   child: Text(item.visitationStatus!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12, color: ungu4)),
+                                  // ),
                                 ],
                               ),
                               children: [
@@ -195,17 +217,17 @@ class _VisitationScreenState extends State<VisitationScreen> {
                                   children: [
                                     TableRow(
                                       children: [
-                                        const Text('Date', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                                        const Text(':', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                                        Text(item.visitationDate!, style: const TextStyle(fontFamily: 'JakartaSansMedium')),
+                                        const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold')),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold')),
+                                        Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium')),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                                     TableRow(
                                       children: [
-                                        const Text('Customer', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                                        const Text(':', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'JakartaSansMedium')),
+                                        const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold')),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold')),
+                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium')),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
@@ -247,7 +269,7 @@ class _VisitationScreenState extends State<VisitationScreen> {
                     );
                   }
                   // DEFAULT (INITIAL)
-                  return const Center(child: Text("Silakan tekan Refresh", style: TextStyle(fontFamily: 'JakartaSansMedium', color: Colors.grey)));
+                  return const Center(child: Text("Silakan tekan Refresh", style: TextStyle(fontFamily: 'InterMedium', color: Colors.grey)));
                 },
               ),
             ),

@@ -9,7 +9,11 @@ class ApiAbseni {
     return "$url/api/absensi/checkOUT";
   }
 
-  static lastCheckIn(salesid, attType) {
-    return "$url/api/absensi/lastcheckIN/$salesid/$attType";
+  static lastCheckIn(salesid) {
+    return "$url/api/absensi/lastcheckIN/$salesid";
+  }
+
+  static radius() {
+    return "$url/api/radius/getRadius";
   }
 }

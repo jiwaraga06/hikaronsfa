@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hikaronsfa/source/env/env.dart';
 import 'package:hikaronsfa/source/repository/RepositoryAbsensi.dart';
 import 'package:hikaronsfa/source/repository/RepositoryAuth.dart';
+import 'package:hikaronsfa/source/repository/RepositoryBanner.dart';
 import 'package:hikaronsfa/source/repository/RepositoryLocation.dart';
 import 'package:hikaronsfa/source/repository/RepositoryOrder.dart';
 import 'package:hikaronsfa/source/repository/RepositoryVisitDiscuss.dart';
@@ -16,9 +17,12 @@ import 'package:hikaronsfa/source/repository/repositoryCustomer.dart';
 import 'package:hikaronsfa/source/router/router.dart';
 import 'package:hikaronsfa/source/service/Absensi/cubit/absensi_check_in_cubit.dart';
 import 'package:hikaronsfa/source/service/Absensi/cubit/absensi_check_out_cubit.dart';
+import 'package:hikaronsfa/source/service/Absensi/cubit/check_status_absen_cubit.dart';
 import 'package:hikaronsfa/source/service/Absensi/cubit/get_last_check_in_cubit.dart';
 import 'package:hikaronsfa/source/service/Auth/cubit/auth_cubit.dart';
 import 'package:hikaronsfa/source/service/Auth/cubit/profile_cubit.dart';
+import 'package:hikaronsfa/source/service/Banner/cubit/banner_cubit.dart';
+import 'package:hikaronsfa/source/service/CheckPermission/cubit/check_permission_cubit.dart';
 import 'package:hikaronsfa/source/service/Color/cubit/get_color_cubit.dart';
 import 'package:hikaronsfa/source/service/Customer/cubit/get_customer_cubit.dart';
 import 'package:hikaronsfa/source/service/Customer/cubit/get_customer_visitation_cubit.dart';
@@ -29,6 +33,7 @@ import 'package:hikaronsfa/source/service/Location/cubit/get_location_customer_c
 import 'package:hikaronsfa/source/service/MarkerLocation/cubit/marker_location_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_detail_cubit.dart';
+import 'package:hikaronsfa/source/service/Radius/cubit/get_radius_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/Delete/cubit/delete_visitation_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/Insert/cubit/insert_visitation_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/Update/cubit/update_visitation_cubit.dart';
@@ -100,13 +105,17 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(create: (context) => RepositoryVisitPic()),
         RepositoryProvider(create: (context) => RepositoryVisitDiscuss()),
         RepositoryProvider(create: (context) => RepositoryVisitImage()),
+        RepositoryProvider(create: (context) => RepositoryBanner()),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => MarkerLocationCubit()),
           BlocProvider(create: (context) => ProfileCubit()),
           BlocProvider(create: (context) => DistanceLocationCubit()),
+          BlocProvider(create: (context) => CheckPermissionCubit()),
           BlocProvider(create: (context) => AuthCubit(repository: RepositoryAuth())),
+          // BANNER
+          BlocProvider(create: (context) => BannerCubit(repository: RepositoryBanner())),
           // CUSTOMER
           BlocProvider(create: (context) => GetCustomerCubit(repository: RepositoryCustomer())),
           BlocProvider(create: (context) => GetCustomerVisitationCubit(repository: RepositoryCustomer())),
@@ -114,6 +123,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => AddLocationCubit(repository: RepositoryLocation())),
           BlocProvider(create: (context) => GetLocationCustomerCubit(repository: RepositoryLocation())),
           // ABSENSI
+          BlocProvider(create: (context) => GetRadiusCubit(repository: RepositoryAbsensi())),
+          BlocProvider(create: (context) => CheckStatusAbsenCubit(repository: RepositoryAbsensi())),
           BlocProvider(create: (context) => GetLastCheckInCubit(repository: RepositoryAbsensi())),
           BlocProvider(create: (context) => AbsensiCheckInCubit(repository: RepositoryAbsensi())),
           BlocProvider(create: (context) => AbsensiCheckOutCubit(repository: RepositoryAbsensi())),
@@ -149,7 +160,7 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-          theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: ungu)),
+          theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: biru)),
           builder: EasyLoading.init(),
           onGenerateRoute: widget.router!.generateRoute,
         ),

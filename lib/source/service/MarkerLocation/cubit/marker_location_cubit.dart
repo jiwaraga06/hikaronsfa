@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:hikaronsfa/source/env/address.dart';
 // import 'package:location/location.dart';
 import 'package:meta/meta.dart';
 import 'package:geolocator/geolocator.dart';
@@ -50,11 +51,12 @@ class MarkerLocationCubit extends Cubit<MarkerLocationState> {
     await Geolocator.getCurrentPosition().then((location) async {
       print("isMock : ${location.isMocked}");
       List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
+      var alamat = await getFullAddress(latitude: location.latitude, longitude: location.longitude);
       // print(placemarks[0]);
       if (location.isMocked == true) {
         emit(MarkerLocationFailed(isMock: true, message: "Maaf, fake gps terdeteksi"));
       } else {
-        emit(MarkerLocationLoaded(latitude: location.latitude, longitude: location.longitude, myPlacement: placemarks));
+        emit(MarkerLocationLoaded(latitude: location.latitude, longitude: location.longitude, myPlacement: placemarks, alamatSaya: alamat));
       }
     });
     // serviceEnabled = await location.serviceEnabled();

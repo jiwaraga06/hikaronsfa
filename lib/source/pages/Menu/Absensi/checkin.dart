@@ -18,6 +18,7 @@ class _CheckINScreenState extends State<CheckINScreen> {
   var customer_id, customer_name;
   double? latitudePlace = 0.0;
   double? longitudePlace = 0.0;
+  String alamatCustomer = "";
   void onChangeRadioCustomer(value) {
     setState(() {
       selectedCustomerType = value;
@@ -46,6 +47,18 @@ class _CheckINScreenState extends State<CheckINScreen> {
   void prosesCheckin() async {
     takePicture();
     await Future.delayed(Duration(seconds: 1));
+    // if (imageFile == null) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text('Silakan ambil foto terlebih dahulu', style: TextStyle(color: Colors.white)),
+    //       backgroundColor: Colors.red,
+    //       behavior: SnackBarBehavior.floating,
+    //       duration: Duration(seconds: 2),
+    //     ),
+    //   );
+    //   return;
+    // }
+
     BlocProvider.of<AbsensiCheckInCubit>(
       context,
     ).prosesCheckIn(customer_id, customer_name, controllerNonCustomer.text, selectedCustomerType, latitudePlace, longitudePlace, imageFile, context);
@@ -61,10 +74,31 @@ class _CheckINScreenState extends State<CheckINScreen> {
     BlocProvider.of<MarkerLocationCubit>(context).reset();
   }
 
+  var selectedIndexCustomer = 0;
+
+  void onSelectCustomerType(int index) {
+    setState(() {
+      selectedIndexCustomer = index;
+      selectedCustomerType = index == 0 ? 'C' : 'N';
+    });
+  }
+
+  void setValueCustomer(value, data) {
+    setState(() {
+      data.where((e) => e.ptnrName == value).forEach((a) async {
+        customer_id = a.ptnrId;
+        customer_name = a.ptnrName;
+        getLocationCust(customer_id);
+        await Future.delayed(Duration(seconds: 1));
+        distancePlace();
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GetCustomerCubit>(context).getCustomerAll(context);
+    BlocProvider.of<GetCustomerCubit>(context).getLocationCustomer(context);
     BlocProvider.of<MarkerLocationCubit>(context).getCurrentLocation();
     mapController = MapController();
     cameraController = CameraController(cameras[1], ResolutionPreset.max);
@@ -92,9 +126,9 @@ class _CheckINScreenState extends State<CheckINScreen> {
 
   @override
   void dispose() {
-    cameraController!.dispose();
-    mapController.dispose();
     super.dispose();
+    // mapController.dispose();
+    // BlocProvider.of<MarkerLocationCubit>(context).stopLocationStream();
   }
 
   @override
@@ -105,12 +139,6 @@ class _CheckINScreenState extends State<CheckINScreen> {
         clear();
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: biru,
-          leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-          title: Text("Check-In", style: TextStyle(color: Colors.white)),
-          centerTitle: true,
-        ),
         body: MultiBlocListener(
           listeners: [
             BlocListener<GetLocationCustomerCubit, GetLocationCustomerState>(
@@ -126,6 +154,7 @@ class _CheckINScreenState extends State<CheckINScreen> {
                   setState(() {
                     latitudePlace = state.latitudePlace;
                     longitudePlace = state.longitudePlace;
+                    alamatCustomer = state.json['alamat'];
                   });
                 }
               },
@@ -150,324 +179,302 @@ class _CheckINScreenState extends State<CheckINScreen> {
                   var json = state.json;
                   MyDialog.dialogSuccess2(context, json['message']);
                   Navigator.pushNamedAndRemoveUntil(context, dashboardScreen, (route) => false);
-                  BlocProvider.of<GetLastCheckInCubit>(context).getLastCheckIn(selectedCustomerType, context);
+                  BlocProvider.of<GetLastCheckInCubit>(context).getLastCheckIn(context);
                 }
               },
             ),
           ],
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.5,
-                    padding: const EdgeInsets.all(6),
-                    children: [
-                      // ================= MAP (KIRI) =================
-                      BlocBuilder<MarkerLocationCubit, MarkerLocationState>(
-                        builder: (context, state) {
-                          if (state is MarkerLocationLoading) {
-                            return const Center(child: CupertinoActivityIndicator());
-                          }
-                          if (state is MarkerLocationFailed) {
-                            return Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [Text(state.message)],
-                              ),
-                            );
-                          }
-                          if (state is MarkerLocationLoaded == false) {
-                            return const Center(child: CupertinoActivityIndicator());
-                          }
-                          var latitude = (state as MarkerLocationLoaded).latitude!;
-                          var longitude = (state).longitude!;
-                          var place = (state).myPlacement![0];
-                          return Container(
-                            margin: const EdgeInsets.all(6),
-                            child: Stack(
+          child: BlocBuilder<MarkerLocationCubit, MarkerLocationState>(
+            builder: (context, state) {
+              if (state is MarkerLocationLoading) {
+                return const Center(child: CupertinoActivityIndicator());
+              }
+              if (state is MarkerLocationFailed) {
+                return Center(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [Text(state.message)]),
+                );
+              }
+              if (state is MarkerLocationLoaded == false) {
+                return const Center();
+              }
+              var latitude = (state as MarkerLocationLoaded).latitude!;
+              var longitude = (state).longitude!;
+              var place = (state).myPlacement![0];
+              var alamatSaya = (state).alamatSaya;
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: FlutterMap(
+                      mapController: mapController,
+                      options: MapOptions(initialCenter: LatLng(latitude, longitude), initialZoom: 15),
+                      children: [
+                        TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'dev.fleaflet.flutter_map.example'),
+
+                        // LOKASI USER
+                        CircleLayer(
+                          circles: [
+                            CircleMarker(
+                              point: LatLng(latitude, longitude),
+                              radius: 250,
+                              useRadiusInMeter: true,
+                              color: Colors.blue[200]!.withOpacity(0.5),
+                              borderColor: Colors.blue.withOpacity(0.5),
+                              borderStrokeWidth: 2,
+                            ),
+                          ],
+                        ),
+                        MarkerLayer(markers: [Marker(point: LatLng(latitude, longitude), width: 150, height: 80, child: Icon(Icons.location_pin))]),
+                        // LOKASI CUSTOMER
+                        BlocBuilder<GetLocationCustomerCubit, GetLocationCustomerState>(
+                          builder: (context, state) {
+                            if (state is! GetLocationCustomerLoaded) {
+                              return const SizedBox.shrink();
+                            }
+
+                            final lat = state.latitudePlace!;
+                            final lng = state.longitudePlace!;
+
+                            return Stack(
                               children: [
-                                FlutterMap(
-                                  mapController: mapController,
-                                  options: MapOptions(initialCenter: LatLng(latitude, longitude), initialZoom: 15),
-                                  children: [
-                                    TileLayer(
-                                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                      userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                                    ),
-                                    // LOKASI USER
-                                    CircleLayer(
-                                      circles: [
-                                        CircleMarker(
-                                          point: LatLng(latitude, longitude),
-                                          radius: 250,
-                                          useRadiusInMeter: true,
-                                          color: Colors.blue[200]!.withOpacity(0.5),
-                                          borderColor: Colors.blue.withOpacity(0.5),
-                                          borderStrokeWidth: 2,
-                                        ),
-                                      ],
-                                    ),
-                                    MarkerLayer(
-                                      markers: [
-                                        Marker(
-                                          point: LatLng(latitude, longitude),
-                                          width: 150,
-                                          child: Column(
-                                            children: [
-                                              Icon(Icons.location_pin),
-                                              SizedBox(height: 4),
-                                              // Card(
-                                              //   color: whiteCustom,
-                                              //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                              //   child: Padding(padding: const EdgeInsets.all(8.0), child: AutoSizeText("place.street", maxLines: 3)),
-                                              // ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                CircleLayer(
+                                  circles: [
+                                    CircleMarker(
+                                      point: LatLng(lat, lng),
+                                      radius: 250,
+                                      useRadiusInMeter: true,
+                                      color: Colors.blue.withOpacity(0.3),
+                                      borderColor: Colors.blue.withOpacity(0.6),
+                                      borderStrokeWidth: 2,
                                     ),
                                   ],
                                 ),
-                                Positioned(right: 16, bottom: 100, child: Column(children: [
-                                               
-                                                
-                                              ],
-                                            )),
+                                MarkerLayer(
+                                  markers: [
+                                    Marker(point: LatLng(lat, lng), width: 40, height: 40, child: const Icon(Icons.location_pin, color: Colors.red, size: 40)),
+                                  ],
+                                ),
                               ],
-                            ),
-                          );
-                        },
-                      ),
-
-                      // ================= CAMERA (KANAN) =================
-                      Container(
-                        color: Colors.black,
-                        margin: const EdgeInsets.all(6),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 70,
+                    right: 18,
+                    child: Container(
+                      width: 140,
+                      height: 220,
+                      margin: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(12)),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
                         child:
                             cameraController != null && cameraController!.value.isInitialized
                                 ? CameraPreview(cameraController!)
                                 : const Center(child: CircularProgressIndicator(color: Colors.white)),
                       ),
-                    ],
+                    ),
                   ),
-                ),
 
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(color: whiteCustom, border: Border.all(color: ungu, width: 2), borderRadius: BorderRadius.circular(8)),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: const Text("Customer"),
-                                leading: Radio<String>(
-                                  value: valueCustomer,
-                                  groupValue: selectedCustomerType,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedCustomerType = valueCustomer;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: const Text("Non-Customer"),
-                                leading: Radio<String>(
-                                  value: valueNonCustomer,
-                                  groupValue: selectedCustomerType,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedCustomerType = valueNonCustomer;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      width: double.infinity,
+                      height: 100,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.black54, Colors.black26, Colors.transparent, Colors.transparent],
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      if (selectedCustomerType == "C")
-                        BlocBuilder<GetCustomerCubit, GetCustomerState>(
-                          builder: (context, state) {
-                            final bool isLoaded = state is GetCustomerLoaded;
-                            // final data = (state as GetCustomerLoaded).model;
-                            final data = isLoaded ? state.model : [];
-                            return DropdownSearch(
-                              popupProps: const PopupProps.menu(showSearchBox: true, fit: FlexFit.loose),
-                              items: data.map((e) => e.ptnrName).toList(),
-                              selectedItem: customer_name,
-                              dropdownDecoratorProps: const DropDownDecoratorProps(
-                                dropdownSearchDecoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                  hintText: "Search Customer",
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  hintStyle: TextStyle(color: Colors.black),
-                                ),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  print("disana");
-                                  data.where((e) => e.ptnrName == value).forEach((a) async {
-                                    customer_id = a.ptnrId;
-                                    customer_name = a.ptnrName;
-                                    getLocationCust(customer_id);
-                                    await Future.delayed(Duration(seconds: 1));
-                                    distancePlace();
-                                  });
-                                });
-                              },
-                            );
-                          },
-                        )
-                      else
-                        CustomField(controller: controllerNonCustomer, hintText: "Masukan Nama Non-Customer"),
-                      const SizedBox(height: 12),
-                      Table(
-                        border: TableBorder.all(style: BorderStyle.none),
-                        columnWidths: const <int, TableColumnWidth>{0: FixedColumnWidth(150), 1: FixedColumnWidth(15)},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TableRow(
-                            children: [
-                              const Text('Customer Name', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                              const Text(':', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                              if (selectedCustomerType == "C")
-                                Text(customer_name ?? "", style: const TextStyle(fontFamily: 'JakartaSansMedium'))
-                              else
-                                Text(controllerNonCustomer.text, style: const TextStyle(fontFamily: 'JakartaSansMedium')),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12),
+                            child: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.replay_circle_filled_outlined, size: 30)),
                           ),
-                          const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
-                          TableRow(
-                            children: [
-                              const Text('Jarak', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                              const Text(':', style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-                              BlocBuilder<DistanceLocationCubit, DistanceLocationState>(
-                                builder: (context, state) {
-                                  num distance = 0;
-
-                                  if (state is DistanceLocationLoaded) {
-                                    distance = state.distance ?? 0;
-                                  }
-
-                                  return Text('${distance.toStringAsFixed(2)} M', style: const TextStyle(fontFamily: 'JakartaSansMedium'));
-                                },
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: IconButton(
+                              onPressed: () {
+                                BlocProvider.of<MarkerLocationCubit>(context).getCurrentLocation();
+                              },
+                              icon: Icon(Icons.change_circle_sharp, size: 30),
+                            ),
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        height: 150,
-                        margin: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.black.withOpacity(0.3), width: 1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: BlocBuilder<GetLocationCustomerCubit, GetLocationCustomerState>(
-                          builder: (context, state) {
-                            if (state is GetLocationCustomerInitial) {
-                              return Container();
-                            }
-                            if (state is GetLocationCustomerLoading) {
-                              return const Center(child: CupertinoActivityIndicator());
-                            }
-                            if (state is GetLocationCustomerFailed) {
-                              return Center();
-                            }
-                            if (state is GetLocationCustomerLoaded == false) {
-                              return const Center(child: CupertinoActivityIndicator());
-                            }
-                            var json = (state as GetLocationCustomerLoaded).json;
 
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [AutoSizeText(json['alamat'])]),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        height: 150,
-                        margin: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.black.withOpacity(0.3), width: 1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: BlocBuilder<MarkerLocationCubit, MarkerLocationState>(
-                          builder: (context, state) {
-                            if (state is MarkerLocationLoading) {
-                              return const Center(child: CupertinoActivityIndicator());
-                            }
-                            if (state is MarkerLocationFailed) {
-                              return Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [Text(state.message)],
-                                ),
-                              );
-                            }
-                            if (state is MarkerLocationLoaded == false) {
-                              return const Center(child: CupertinoActivityIndicator());
-                            }
-                            var latitude = (state as MarkerLocationLoaded).latitude!;
-                            var longitude = (state).longitude!;
-                            var place = (state).myPlacement![0];
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [AutoSizeText(place.street!)]),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width,
-                    child: CustomButton(
-                      onTap: prosesCheckin,
-                      text: "Check-In",
-                      icon: Icons.camera_alt,
-                      backgroundColor: biru,
-                      textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 280,
+                      decoration: BoxDecoration(color: biru3, borderRadius: BorderRadius.only(topRight: Radius.circular(60), topLeft: Radius.circular(60))),
                     ),
                   ),
-                ),
-              ],
-            ),
+
+                  Positioned(
+                    bottom: 0,
+                    right: 18,
+                    left: 18,
+                    child: SafeArea(
+                      top: false,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 320,
+                        padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
+                        decoration: BoxDecoration(
+                          color: whiteCustom,
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(60), topLeft: Radius.circular(60)),
+                        ),
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.location_on, size: 20),
+                                            const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                          ],
+                                        ),
+                                        AutoSizeText(
+                                          "$alamatSaya",
+                                          style: TextStyle(fontFamily: 'InterMedium', fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.location_on, size: 20),
+                                            const Text('Lokasi Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16)),
+                                          ],
+                                        ),
+                                        AutoSizeText(alamatCustomer, style: TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                margin: const EdgeInsets.only(left: 6, right: 6),
+                                decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  children: List.generate(2, (index) {
+                                    final isActive = selectedIndexCustomer == index;
+                                    return Expanded(
+                                      child: GestureDetector(
+                                        onTap: () => onSelectCustomerType(index),
+                                        child: AnimatedContainer(
+                                          duration: const Duration(milliseconds: 250),
+                                          curve: Curves.easeInExpo,
+                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                isActive
+                                                    ? selectedIndexCustomer == 0
+                                                        ? Colors.blue
+                                                        : Colors.red[800]
+                                                    : Colors.transparent,
+                                            borderRadius:
+                                                selectedIndexCustomer == 0
+                                                    ? BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))
+                                                    : BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                          ),
+                                          child: Text(
+                                            index == 0 ? 'Customer' : 'Non - Customer',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: isActive ? Colors.white : Colors.grey.shade700, fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              if (selectedCustomerType == "C")
+                                BlocBuilder<GetCustomerCubit, GetCustomerState>(
+                                  builder: (context, state) {
+                                    final bool isLoaded = state is GetCustomerLoaded;
+                                    // final data = (state as GetCustomerLoaded).model;
+                                    final data = isLoaded ? state.model : [];
+                                    return DropdownSearch(
+                                      popupProps: const PopupProps.menu(showSearchBox: true),
+                                      items: data.map((e) => e.ptnrName).toList(),
+                                      selectedItem: customer_name,
+                                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                                        dropdownSearchDecoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                          hintText: "Search Customer",
+                                          labelStyle: TextStyle(color: Colors.black),
+                                          hintStyle: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        print("disana");
+                                        setValueCustomer(value, data);
+                                      },
+                                    );
+                                  },
+                                )
+                              else
+                                CustomField(controller: controllerNonCustomer, hintText: "Masukan Nama Non-Customer", maxline: 1),
+                              const SizedBox(height: 12),
+
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  height: 45,
+                                  width: double.infinity,
+                                  child: CustomButton2(
+                                    onTap: prosesCheckin,
+                                    text: "Check-In",
+                                    backgroundColor: biru,
+                                    textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'JakartaSansSemiBold'),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

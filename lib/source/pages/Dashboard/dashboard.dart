@@ -18,29 +18,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void showlistmenu() {
+    BlocProvider.of<CheckPermissionCubit>(context).requestCameraAndLocation();
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
+      backgroundColor: whiteCustom2,
       builder: (context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.pin_drop),
-              title: Text("Lokasi", style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-              subtitle: Text("Setting lokasi Customer", style: TextStyle(fontFamily: 'JakartaSansMedium')),
+              leading: Icon(Icons.pin_drop, color: merah,),
+              title: Text("Lokasi", style: TextStyle(fontFamily: 'InterSemiBold')),
+              subtitle: Text("Setting lokasi Customer", style: TextStyle(fontFamily: 'InterMedium')),
               onTap: () => Navigator.pushNamed(context, lokasiScreen),
             ),
             ListTile(
-              leading: Icon(Icons.person_2),
-              title: Text("Check IN", style: TextStyle(fontFamily: 'JakartaSansSemiBold')),
-              subtitle: Text("Absen untuk check in kunjungan", style: TextStyle(fontFamily: 'JakartaSansMedium')),
+              leading: Icon(Icons.person_2, color: biru),
+              title: Text("Check IN", style: TextStyle(fontFamily: 'InterSemiBold')),
+              subtitle: Text("Absen untuk check in kunjungan", style: TextStyle(fontFamily: 'InterMedium')),
               // onTap: () => Navigator.pushNamed(context, checkInScreen),
               onTap: () {
-                if (isCheckin == false) {
+                print(isCheckin);
+                if (isCheckin == true) {
                   Navigator.pushNamed(context, checkInScreen);
-                return;
-                } 
+                  return;
+                }
                 MyDialog.dialogAlert2(context, "Anda masih memiliki Check In aktif.\nSilakan Check Out terlebih dahulu.");
               },
             ),
@@ -54,37 +57,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<CheckPermissionCubit>(context).requestCameraAndLocation();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: MultiBlocListener(
         listeners: [
-          BlocListener<GetLastCheckInCubit, GetLastCheckInState>(
+          BlocListener<CheckStatusAbsenCubit, CheckStatusAbsenState>(
             listener: (context, state) {
-              if (state is GetLastCheckInLoading) {
-                // EasyLoading.show();
-              }
+              if (state is CheckStatusAbsenLoaded) {
+                bool isReadyCheckin = state.isReadyCheckin!;
 
-              if (state is GetLastCheckInFailed) {
-                // EasyLoading.dismiss();
-                MyDialog.dialogAlert2(context, state.statusCode == 500 ? "Terjadi kesalahan" : state.json['message']);
-              }
-
-              if (state is GetLastCheckInLoaded) {
-                // EasyLoading.dismiss();
-
-                final data = state.model;
-
-                final bool alreadyCheckIn = data?.attndDateIn != null && data?.attndDateOut == null;
                 setState(() {
-                  if (alreadyCheckIn) {
-                    isCheckin = true;
-                  } else {
-                    isCheckin = false;
-                    // ✅ BOLEH CHECK IN
-                  }
+                  isCheckin = isReadyCheckin;
                 });
               }
             },
@@ -92,41 +80,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
         child: widgets.elementAt(currentIndex),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: ungu,
+        backgroundColor: whiteCustom2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
         onPressed: showlistmenu,
-        child: const Icon(Icons.dashboard, color: Colors.white),
+        child: Image.asset('assets/images/Dashboard.png'),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-        itemCount: iconList.length,
-        tabBuilder: (int index, bool isActive) {
-          final color = isActive ? ungu : Colors.grey;
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(iconList[index], size: 26, color: color),
-              const SizedBox(height: 4),
-              if (index == 0) Text('Home', style: TextStyle(color: color, fontSize: 13, fontFamily: 'JakartaSansSemibold')),
-              if (index == 1) Text('Aktifitas', style: TextStyle(color: color, fontSize: 13, fontFamily: 'JakartaSansSemibold')),
-              if (index == 2) Text('Inbox', style: TextStyle(color: color, fontSize: 13, fontFamily: 'JakartaSansSemibold')),
-              if (index == 3) Text('Profile', style: TextStyle(color: color, fontSize: 13, fontFamily: 'JakartaSansSemibold')),
-            ],
-          );
-        },
-        backgroundColor: Colors.white,
-        activeIndex: selectedIndex,
-        splashColor: ungu2,
-        notchSmoothness: NotchSmoothness.defaultEdge,
-        gapLocation: GapLocation.center,
-        onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 6))],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: BottomNavigationBar(
+              backgroundColor: whiteCustom2,
+              currentIndex: currentIndex,
+              type: BottomNavigationBarType.fixed,
+              onTap: onItemTapped,
+              selectedLabelStyle: TextStyle(fontFamily: 'InterMedium', color: ungu3, fontSize: 15),
+              unselectedLabelStyle: TextStyle(fontFamily: 'InterRegular', color: grey3, fontSize: 15),
+              items: [
+                BottomNavigationBarItem(icon: Image.asset(currentIndex == 0 ? 'assets/images/Home.png' : 'assets/images/HomeGrey.png'), label: 'Home'),
+                BottomNavigationBarItem(
+                  icon: Image.asset(currentIndex == 1 ? 'assets/images/Calendar.png' : 'assets/images/CalendarGrey.png'),
+                  label: 'Aktifitas',
+                ),
+                BottomNavigationBarItem(icon: Image.asset(currentIndex == 2 ? 'assets/images/Alarm.png' : 'assets/images/AlarmGrey.png'), label: 'Inbox'),
+                BottomNavigationBarItem(icon: Image.asset(currentIndex == 3 ? 'assets/images/People.png' : 'assets/images/PeopleGrey.png'), label: 'Profile'),
+              ],
+            ),
+          ),
+        ),
       ),
+
+      // bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+      //   itemCount: iconList.length,
+      //   tabBuilder: (int index, bool isActive) {
+      //     final color = isActive ? ungu : Colors.grey;
+      //     return Column(
+      //       mainAxisSize: MainAxisSize.min,
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         Icon(iconList[index], size: 26, color: color),
+      //         const SizedBox(height: 4),
+      //         if (index == 0) Text('Home', style: TextStyle(color: color, fontSize: 13, fontFamily: 'InterSemibold')),
+      //         if (index == 1) Text('Aktifitas', style: TextStyle(color: color, fontSize: 13, fontFamily: 'JakartaSansSemibold')),
+      //         if (index == 2) Text('Inbox', style: TextStyle(color: color, fontSize: 13, fontFamily: 'JakartaSansSemibold')),
+      //         if (index == 3) Text('Profile', style: TextStyle(color: color, fontSize: 13, fontFamily: 'JakartaSansSemibold')),
+      //       ],
+      //     );
+      //   },
+      //   backgroundColor: Colors.white,
+      //   activeIndex: selectedIndex,
+      //   splashColor: ungu2,
+      //   notchSmoothness: NotchSmoothness.defaultEdge,
+      //   gapLocation: GapLocation.center,
+      //   onTap: onItemTapped
+      // ),
     );
   }
 }

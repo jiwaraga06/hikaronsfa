@@ -10,9 +10,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   void getProfile(context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var username = pref.getString('username');
+    var email = pref.getString('user_email');
     emit(ProfileLoading());
-    if (username != null) {
-      emit(ProfileLoaded(username: username));
+    if (username != null && email != null) {
+      emit(ProfileLoaded(username: username, email: email!));
     }
   }
 }

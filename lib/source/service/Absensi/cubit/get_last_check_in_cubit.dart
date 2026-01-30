@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hikaronsfa/source/model/Absensi/modelLastCheckIn.dart';
 import 'package:hikaronsfa/source/repository/RepositoryAbsensi.dart';
 import 'package:meta/meta.dart';
@@ -12,35 +13,22 @@ class GetLastCheckInCubit extends Cubit<GetLastCheckInState> {
   final RepositoryAbsensi? repository;
   GetLastCheckInCubit({this.repository}) : super(GetLastCheckInInitial());
 
-  void getLastCheckIn(type, context) async {
+  void getLastCheckIn(context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var salesid = pref.getString("user_as_sales_id");
 
     emit(GetLastCheckInLoading());
-
-    repository!
-        .lastCheckIn(salesid, type, context)
-        .then((value) {
-          final json = value.data;
-          final statusCode = value.statusCode;
-
-          // print("GET LAST CHECK IN : $json");
-
-          if (statusCode == 200) {
-            final data = json?['data'];
-
-            if (data == null) {
-              // data kosong tapi request sukses
-              emit(GetLastCheckInLoaded(statusCode: statusCode, model: null));
-            } else {
-              emit(GetLastCheckInLoaded(statusCode: statusCode, model: modelLastCheckInFromJson(jsonEncode(data))));
-            }
-          } else {
-            emit(GetLastCheckInFailed(statusCode: statusCode, json: json));
-          }
-        })
-        .catchError((e) {
-          emit(GetLastCheckInFailed(statusCode: 500, json: {'message': e.toString()}));
-        });
+    final response = await repository!.lastCheckIn(salesid, context);
+    if (response == null) {
+      emit(GetLastCheckInFailed(statusCode: 500, json: {"message": "Response kosong"}));
+      return;
+    }
+    var statusCode = response.statusCode ?? 500;
+    var json = response.data;
+    if (statusCode == 200) {
+      emit(GetLastCheckInLoaded(statusCode: statusCode, model: modelLastCheckInFromJson(jsonEncode(json['data']))));
+    } else {
+      emit(GetLastCheckInFailed(statusCode: statusCode, json: json));
+    }
   }
 }

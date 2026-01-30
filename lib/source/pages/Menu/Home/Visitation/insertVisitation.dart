@@ -21,9 +21,19 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
   }
 
   void insert() {
-    if (formkey.currentState!.validate()) {
-      BlocProvider.of<InsertVisitationCubit>(context).insertVisitation(controllerTanggal.text, customerId, attndOid, context);
+    if (!formkey.currentState!.validate()) return;
+
+    if (modelEntryPIC.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('PIC wajib diisi minimal 1'), backgroundColor: Colors.red));
+      return;
     }
+
+    if (modelEntryDiscuss.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Diskusi wajib diisi minimal 1'), backgroundColor: Colors.red));
+      return;
+    }
+
+    BlocProvider.of<InsertVisitationCubit>(context).insertVisitation(controllerTanggal.text, customerId, attndOid, context);
   }
 
   void generatevisitationOid() {
@@ -53,21 +63,24 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
   @override
   void initState() {
     super.initState();
-    controllerTanggal = TextEditingController(text: tanggal);
     BlocProvider.of<GetCustomerVisitationCubit>(context).getCustomerVisitation(context);
     generatevisitationOid();
     generatevisitationOidBaru();
     generatevisitationdVisitationOid();
+    BlocProvider.of<PicCubit>(context).clearData();
+    BlocProvider.of<DiscussCubit>(context).clearData();
+    BlocProvider.of<LampiranCubit>(context).clearData();
     // DETAIL
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteCustom,
       appBar: AppBar(
         backgroundColor: hijauDark3,
         leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Aktifitas Kunjungan Entry", style: TextStyle(color: Colors.white)),
+        title: Text("Aktifitas Kunjungan Entry", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 18)),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
@@ -78,22 +91,39 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
       ),
       body: MultiBlocListener(
         listeners: [
+          BlocListener<GetCustomerVisitationCubit, GetCustomerVisitationState>(
+            listener: (context, state) {
+              if (state is GetCustomerVisitationLoading) {}
+              if (state is GetCustomerVisitationFailed) {}
+              if (state is GetCustomerVisitationLoaded) {
+                var json = state.model!;
+                setState(() {
+                  controllerTanggal = TextEditingController(text: json[0].attndDateIn);
+                });
+                // Navigator.of(context).pop(true);
+              }
+            },
+          ),
           BlocListener<InsertVisitationCubit, InsertVisitationState>(
             listener: (context, state) {
               if (state is InsertVisitationLoading) {
                 MyDialog.dialogLoading(context);
                 return;
               }
-              Navigator.of(context).pop();
               if (state is InsertVisitationFailed) {
+                Navigator.of(context).pop();
                 var json = state.json;
                 MyDialog.dialogAlert2(context, json['data']);
               }
               if (state is InsertVisitationLoaded) {
+                Navigator.of(context).pop();
                 var json = state.json;
                 MyDialog.dialogSuccess2(context, json['data']);
                 BlocProvider.of<InsertVisitationPicCubit>(context).insertpic(context);
                 BlocProvider.of<InsertVisitationDiscussCubit>(context).insertDiscuss(context);
+                if (modelEntryImage.isNotEmpty) {
+                  BlocProvider.of<InsertVisitationImageCubit>(context).insertImage(context);
+                }
                 // Navigator.of(context).pop(true);
               }
             },
@@ -101,17 +131,17 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
           BlocListener<InsertVisitationPicCubit, InsertVisitationPicState>(
             listener: (context, state) {
               if (state is InsertVisitationPicLoading) {
-                MyDialog.dialogLoading(context);
+                // MyDialog.dialogLoading(context);
                 return;
               }
-              Navigator.pop(context);
+              // Navigator.pop(context);
               if (state is InsertVisitationPicFailed) {
                 var json = state.json;
-                MyDialog.dialogAlert2(context, json['data']);
+                // MyDialog.dialogAlert2(context, json['data']);
               }
               if (state is InsertVisitationPicLoaded) {
                 var json = state.json;
-                MyDialog.dialogSuccess2(context, json['data']);
+                // MyDialog.dialogSuccess2(context, json['data']);
                 // Navigator.of(context).pop(true);
               }
             },
@@ -119,17 +149,35 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
           BlocListener<InsertVisitationDiscussCubit, InsertVisitationDiscussState>(
             listener: (context, state) {
               if (state is InsertVisitationDiscussLoading) {
-                MyDialog.dialogLoading(context);
+                // MyDialog.dialogLoading(context);
                 return;
               }
               Navigator.pop(context);
               if (state is InsertVisitationDiscussFailed) {
                 var json = state.json;
-                MyDialog.dialogAlert2(context, json['data']);
+                // MyDialog.dialogAlert2(context, json['data']);
               }
               if (state is InsertVisitationDiscussLoaded) {
                 var json = state.json;
-                MyDialog.dialogSuccess2(context, json['data']);
+                // MyDialog.dialogSuccess2(context, json['data']);
+                // Navigator.of(context).pop(true);
+              }
+            },
+          ),
+          BlocListener<InsertVisitationImageCubit, InsertVisitationImageState>(
+            listener: (context, state) {
+              if (state is InsertVisitationImageLoading) {
+                // MyDialog.dialogLoading(context);
+                // return;
+              }
+              // Navigator.pop(context);
+              if (state is InsertVisitationImageFailed) {
+                var json = state.json;
+                // MyDialog.dialogAlert2(context, json['data']);
+              }
+              if (state is InsertVisitationImageLoaded) {
+                var json = state.json;
+                // MyDialog.dialogSuccess2(context, json['data']);
                 // Navigator.of(context).pop(true);
               }
             },
@@ -143,16 +191,20 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                 child: Form(
                   key: formkey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text("Tanggal", style: TextStyle(fontFamily: "InterMedium")),
+                      const SizedBox(height: 6),
                       CustomField2(
                         controller: controllerTanggal,
                         readOnly: true,
                         preffixIcon: const Icon(Icons.calendar_month_outlined),
                         hintText: "Tanggal Kunjungan",
-                        labelText: "Tanggal Kunjungan",
                         messageError: "Please fill this field",
                       ),
                       const SizedBox(height: 12),
+                      const Text("Customer", style: TextStyle(fontFamily: "InterMedium")),
+                      const SizedBox(height: 6),
                       BlocBuilder<GetCustomerVisitationCubit, GetCustomerVisitationState>(
                         builder: (context, state) {
                           final bool isLoaded = state is GetCustomerVisitationLoaded;
@@ -166,7 +218,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
-                              hintText: "Search Customer",
+                              hintText: "Choose Customer",
                               labelStyle: TextStyle(color: Colors.black),
                               hintStyle: TextStyle(color: Colors.black),
                             ),
@@ -183,6 +235,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                                   customer_name = a.ptnrName;
                                   customerId = int.parse(a.ptnrId.toString());
                                   attndOid = a.attndOid;
+                                  controllerTanggal = TextEditingController(text: a.attndDateIn);
                                 });
                               });
                             },
@@ -196,7 +249,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
               const SizedBox(height: 20),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 6),
-                decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: whiteCustom2, borderRadius: BorderRadius.circular(100)),
                 child: Row(
                   children: List.generate(titleType.length, (index) {
                     final isActive = typeVisit == index;
@@ -206,7 +259,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 250),
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(color: isActive ? Colors.blue : Colors.transparent, borderRadius: BorderRadius.circular(10)),
+                          decoration: BoxDecoration(color: isActive ? Colors.blue : Colors.transparent, borderRadius: BorderRadius.circular(100)),
                           child: Text(
                             titleType[index],
                             textAlign: TextAlign.center,
@@ -218,149 +271,9 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                   }),
                 ),
               ),
-              const SizedBox(height: 20),
-              if (typeVisit == 0)
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 40,
-                        child: CustomButton(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => PicFormPage()));
-                          },
-                          text: "ADD PIC",
-                          textStyle: TextStyle(fontSize: 16, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    BlocBuilder<PicCubit, PicState>(
-                      builder: (context, state) {
-                        if (state is PicLoaded == false) {
-                          return Container();
-                        }
-                        var data = (state as PicLoaded).model!;
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var a = data[index];
-                            return Slidable(
-                              key: ValueKey(index),
-                              startActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                dismissible: DismissiblePane(onDismissed: () {}),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      context.read<PicCubit>().deleteData(a.visitationdOid!);
-                                    },
-                                    backgroundColor: Color(0xFFFE4A49),
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: 'Delete',
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      Navigator.push(context, MaterialPageRoute(builder: (_) => PicFormPage(data: a)));
-                                    },
-                                    backgroundColor: Color(0xFF21B7CA),
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.edit,
-                                    label: 'Edit',
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListTile(
-                                  title: Text(a.visitationdRemarks!),
-                                  subtitle: Text(a.visitationdJabatan!),
-                                  shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8)),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-
-              if (typeVisit == 1)
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 40,
-                        child: CustomButton(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => DiscussFormPage()));
-                          },
-                          text: "ADD DISCUSS",
-                          textStyle: TextStyle(fontSize: 16, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    BlocBuilder<DiscussCubit, DiscussState>(
-                      builder: (context, state) {
-                        if (state is DiscussLoaded == false) {
-                          return Container();
-                        }
-                        var data = (state as DiscussLoaded).model!;
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var a = data[index];
-                            return Slidable(
-                              key: ValueKey(index),
-                              startActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                dismissible: DismissiblePane(onDismissed: () {}),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      context.read<DiscussCubit>().deleteData(a.visitationdOid!);
-                                    },
-                                    backgroundColor: Color(0xFFFE4A49),
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: 'Delete',
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      Navigator.push(context, MaterialPageRoute(builder: (_) => DiscussFormPage(data: a)));
-                                    },
-                                    backgroundColor: Color(0xFF21B7CA),
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.edit,
-                                    label: 'Edit',
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListTile(
-                                  title: Text(a.visitationdRemarks!),
-                                  shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8)),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
+              if (typeVisit == 0) PicView(),
+              if (typeVisit == 1) DiskusiView(),
+              if (typeVisit == 2) LampiranView(),
             ],
           ),
         ),
