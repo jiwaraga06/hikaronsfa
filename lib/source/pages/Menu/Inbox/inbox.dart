@@ -12,7 +12,7 @@ class _InboxScreenState extends State<InboxScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteCustom,
-      appBar: AppBar(backgroundColor: whiteCustom, centerTitle: true, title: Text("Notification", style: TextStyle(fontFamily: "InterMedium", fontSize: 12))),
+      appBar: AppBar(backgroundColor: whiteCustom, centerTitle: true, title: Text("Notification", style: TextStyle(fontFamily: "InterMedium", fontSize: 14))),
     );
   }
 }

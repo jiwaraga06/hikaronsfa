@@ -80,7 +80,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
       appBar: AppBar(
         backgroundColor: hijauDark3,
         leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Aktifitas Kunjungan Entry", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 18)),
+        title: Text("Aktifitas Kunjungan Entry", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 14)),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
@@ -193,7 +193,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Tanggal", style: TextStyle(fontFamily: "InterMedium")),
+                      const Text("Tanggal", style: TextStyle(fontFamily: "InterMedium", fontSize: 12)),
                       const SizedBox(height: 6),
                       CustomField2(
                         controller: controllerTanggal,
@@ -203,7 +203,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                         messageError: "Please fill this field",
                       ),
                       const SizedBox(height: 12),
-                      const Text("Customer", style: TextStyle(fontFamily: "InterMedium")),
+                      const Text("Customer", style: TextStyle(fontFamily: "InterMedium", fontSize: 12)),
                       const SizedBox(height: 6),
                       BlocBuilder<GetCustomerVisitationCubit, GetCustomerVisitationState>(
                         builder: (context, state) {
@@ -263,7 +263,7 @@ class _InsertVisitationScreenState extends State<InsertVisitationScreen> {
                           child: Text(
                             titleType[index],
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: isActive ? Colors.white : Colors.grey.shade700, fontWeight: FontWeight.w600),
+                            style: TextStyle(color: isActive ? Colors.white : Colors.grey.shade700, fontWeight: FontWeight.w600, fontSize: 12),
                           ),
                         ),
                       ),

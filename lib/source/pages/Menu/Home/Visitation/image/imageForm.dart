@@ -71,7 +71,7 @@ class _LampiranFormPageState extends State<LampiranFormPage> {
     return Scaffold(
       backgroundColor: whiteCustom,
       appBar: AppBar(
-        title: Text(isEdit ? 'Ubah Lampiran' : 'Tambah Lampiran Baru', style: TextStyle(fontFamily: "InterSemiBold")),
+        title: Text(isEdit ? 'Ubah Lampiran' : 'Tambah Lampiran Baru', style: TextStyle(fontFamily: "InterSemiBold", fontSize: 14)),
         centerTitle: true,
         backgroundColor: whiteCustom2,
       ),
@@ -101,7 +101,7 @@ class _LampiranFormPageState extends State<LampiranFormPage> {
                         if (image is String && image.isNotEmpty) Center(child: Image.network("$url/storage/uploads/visitation/$image", height: 240)),
                         if (image == null) Container(height: 240, decoration: BoxDecoration(color: Colors.grey.shade100), child: Center(child: Icon(Icons.image),),),
                         const SizedBox(height: 8),
-                        const Text("Keterangan Foto", style: TextStyle(fontFamily: "InterMedium")),
+                        const Text("Keterangan Foto", style: TextStyle(fontFamily: "InterMedium", fontSize: 12)),
                         const SizedBox(height: 6),
                         CustomField2(controller: remarkCtrl, hintText: "Masukan keterangan foto", messageError: "Kolom harus di isi"),
                         const SizedBox(height: 10),
@@ -124,7 +124,7 @@ class _LampiranFormPageState extends State<LampiranFormPage> {
                     height: 45,
                     text: isEdit ? 'Update' : 'Simpan',
                     backgroundColor: biru,
-                    textStyle: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'InterMedium'),
+                    textStyle: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'InterMedium'),
                   ),
                 ],
               ),

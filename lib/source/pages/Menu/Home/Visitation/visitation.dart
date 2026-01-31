@@ -128,7 +128,7 @@ class _VisitationScreenState extends State<VisitationScreen> {
       appBar: AppBar(
         backgroundColor: ungu3,
         leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Aktifitas Kunjungan", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 16)),
+        title: Text("Aktifitas Kunjungan", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 14)),
         centerTitle: true,
         actions: [IconButton(onPressed: filterSearch, icon: Icon(Icons.search, color: Colors.white))],
       ),
@@ -201,7 +201,7 @@ class _VisitationScreenState extends State<VisitationScreen> {
                               childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               leading: const Icon(Icons.assignment_outlined, size: 20),
                               title: Row(
-                                children: [Expanded(child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)))],
+                                children: [Expanded(child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)))],
                               ),
                               children: [
                                 Table(

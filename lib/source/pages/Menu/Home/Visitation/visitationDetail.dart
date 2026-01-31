@@ -40,7 +40,7 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
       appBar: AppBar(
         backgroundColor: ungu3,
         leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-        title: Text("Aktifitas Kunjungan Detail", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 16)),
+        title: Text("Aktifitas Kunjungan Detail", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 14)),
         centerTitle: true,
       ),
       body: BlocBuilder<GetVisitationDetailCubit, GetVisitationDetailState>(

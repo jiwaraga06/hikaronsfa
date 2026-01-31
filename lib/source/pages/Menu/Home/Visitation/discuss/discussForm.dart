@@ -46,7 +46,7 @@ class _DiscussFormPageState extends State<DiscussFormPage> {
     return Scaffold(
       backgroundColor: whiteCustom,
       appBar: AppBar(
-        title: Text(isEdit ? 'Ubah Diskusi' : 'Tambah Diskusi Baru', style: TextStyle(fontFamily: "InterSemiBold")),
+        title: Text(isEdit ? 'Ubah Diskusi' : 'Tambah Diskusi Baru', style: TextStyle(fontFamily: "InterSemiBold", fontSize: 14)),
         centerTitle: true,
         backgroundColor: whiteCustom2,
       ),
@@ -65,7 +65,7 @@ class _DiscussFormPageState extends State<DiscussFormPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Bahan Diskusi", style: TextStyle(fontFamily: "InterMedium")),
+                        const Text("Bahan Diskusi", style: TextStyle(fontFamily: "InterMedium", fontSize: 12)),
                         const SizedBox(height: 6),
                         CustomField2(controller: remarkCtrl, hintText: "Masukan Bahan Diskusi", messageError: "Kolom harus di isi"),
                       ],
@@ -87,7 +87,7 @@ class _DiscussFormPageState extends State<DiscussFormPage> {
                     height: 45,
                     text: isEdit ? 'Update' : 'Simpan',
                     backgroundColor: biru,
-                    textStyle: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'InterMedium'),
+                    textStyle: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'InterMedium'),
                   ),
                 ],
               ),
