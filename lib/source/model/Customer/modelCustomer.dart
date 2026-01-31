@@ -10,5 +10,4 @@ class ModelCustomer {
   factory ModelCustomer.fromJson(Map<String, dynamic> json) {
     return ModelCustomer(ptnrId: json["ptnr_id"], ptnrName: json["ptnr_name"]);
   }
-
 }

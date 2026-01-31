@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: login,
                       text: "Sign In",
                       backgroundColor: ungu3,
-                      textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'InterSemiBold'),
+                      textStyle: const TextStyle(color: whiteCustom, fontSize: 16, fontFamily: 'InterSemiBold'),
                     ),
                   ),
                 ],

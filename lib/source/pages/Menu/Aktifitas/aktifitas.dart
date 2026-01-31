@@ -12,11 +12,7 @@ class _AktifitasScreenState extends State<AktifitasScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteCustom,
-      appBar: AppBar(
-      backgroundColor: whiteCustom,
-        centerTitle: true,
-        title: Text('Aktifitas'),
-      ),
+      appBar: AppBar(backgroundColor: whiteCustom, centerTitle: true, title: Text('Aktifitas', style: TextStyle(fontFamily: "InterMedium", fontSize: 12))),
     );
   }
 }

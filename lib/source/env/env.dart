@@ -65,3 +65,4 @@ const ungu4 = Color(0XFF6D62AD);
 const grey = Color(0XFFBFC6C4);
 const grey2 = Color(0XFFEEEEEE);
 const grey3 = Color(0XFFCBCBCB);
+const teal = Color(0XFF088395);

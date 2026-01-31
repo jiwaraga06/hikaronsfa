@@ -68,6 +68,8 @@ class RouterNavigation {
         return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const VisitationScreen(), transitionsBuilder: topToBottom);
       case insertVisitationScreen:
         return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const InsertVisitationScreen(), transitionsBuilder: rightToLeft);
+      case outstandingShipmentScreen:
+        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const OutstandingScreen(), transitionsBuilder: rightToLeft);
       case updateVisitationScreen:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => const UpdateVisitationScreen(),

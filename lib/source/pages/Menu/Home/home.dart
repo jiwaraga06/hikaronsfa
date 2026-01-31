@@ -76,22 +76,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
             BlocBuilder<BannerCubit, BannerState>(
               builder: (context, state) {
                 if (state is BannerLoaded) {
                   return CarouselSlider(
-                    options: CarouselOptions(height: 160, autoPlay: true, enlargeCenterPage: false),
+                    options: CarouselOptions(height: 160, autoPlay: true, enlargeCenterPage: false, viewportFraction: 1.0, padEnds: false),
                     items:
                         state.model.map((i) {
                           return Builder(
                             builder: (context) {
                               return Container(
                                 width: MediaQuery.of(context).size.width,
-                                margin: const EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(2)),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(2),
                                   child: Image.network(
                                     "$url/storage/banner/${i.bannerImage}",
                                     fit: BoxFit.cover,
@@ -115,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Text("Today Attendace", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
+              child: Text("Today Attendace", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
             ),
             const SizedBox(height: 8),
             BlocBuilder<GetLastCheckInCubit, GetLastCheckInState>(
@@ -142,14 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Text("Order Control", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
+              child: Text("Order Control", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
             ),
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               childAspectRatio: 3.5 / 1,
-              padding: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(2),
               crossAxisSpacing: 12,
               children: [
                 InkWell(
@@ -165,16 +163,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/Buy.png'),
+                        Image.asset('assets/images/Buy.png', height: 25),
                         const SizedBox(width: 10),
-                        AutoSizeText("Order Customer", style: TextStyle(fontSize: 14, fontFamily: 'InterMedium')),
+                        AutoSizeText("Order Customer", style: TextStyle(fontSize: 12, fontFamily: 'InterMedium')),
                       ],
                     ),
                   ),
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, orderScreen);
+                    Navigator.pushNamed(context, outstandingShipmentScreen);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -185,9 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/Clipboard.png'),
+                        Image.asset('assets/images/Clipboard.png', height: 25),
                         const SizedBox(width: 10),
-                        AutoSizeText("Outstanding Shipment", style: TextStyle(fontSize: 12, fontFamily: 'InterMedium')),
+                        AutoSizeText("Outstanding Shipment", style: TextStyle(fontSize: 10, fontFamily: 'InterMedium')),
                       ],
                     ),
                   ),
@@ -198,16 +196,16 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
-              child: Text("Sales Visit Management", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
+              child: Text("Sales Visit Management", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
             ),
             const SizedBox(height: 12),
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 4,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              childAspectRatio: 1, // kotak
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 4,
+              childAspectRatio: 1, 
               padding: const EdgeInsets.all(8),
               children: List.generate(titleMenu.length, (index) {
                 return InkWell(
@@ -215,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.pushNamed(context, routeMenu[index]);
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
                       color: colorMenu[index],
                       borderRadius: BorderRadius.circular(12),
@@ -224,12 +222,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(iconMenu[index], size: 22, color: Colors.white),
+                        Icon(iconMenu[index], size: 18, color: Colors.white),
                         const SizedBox(height: 6),
                         Text(
                           titleMenu[index],
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontFamily: 'InterRegular', fontSize: 12, color: Colors.white),
+                          style: const TextStyle(fontFamily: 'InterRegular', fontSize: 9, color: Colors.white),
                         ),
                       ],
                     ),

@@ -85,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: whiteCustom2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
         onPressed: showlistmenu,
-        child: Image.asset('assets/images/Dashboard.png'),
+        child: Image.asset('assets/images/Dashboard.png', height: 25),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(12),
@@ -101,16 +101,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
               currentIndex: currentIndex,
               type: BottomNavigationBarType.fixed,
               onTap: onItemTapped,
-              selectedLabelStyle: TextStyle(fontFamily: 'InterMedium', color: ungu3, fontSize: 13),
+              selectedLabelStyle: TextStyle(fontFamily: 'InterMedium', color: ungu3, fontSize: 12),
               unselectedLabelStyle: TextStyle(fontFamily: 'InterRegular', color: grey3, fontSize: 11),
               items: [
-                BottomNavigationBarItem(icon: Image.asset(currentIndex == 0 ? 'assets/images/Home.png' : 'assets/images/HomeGrey.png'), label: 'Home'),
                 BottomNavigationBarItem(
-                  icon: Image.asset(currentIndex == 1 ? 'assets/images/Calendar.png' : 'assets/images/CalendarGrey.png'),
+                  icon: Image.asset(currentIndex == 0 ? 'assets/images/Home.png' : 'assets/images/HomeGrey.png', height: 25),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Image.asset(currentIndex == 1 ? 'assets/images/Calendar.png' : 'assets/images/CalendarGrey.png', height: 25),
                   label: 'Aktifitas',
                 ),
-                BottomNavigationBarItem(icon: Image.asset(currentIndex == 2 ? 'assets/images/Alarm.png' : 'assets/images/AlarmGrey.png'), label: 'Inbox'),
-                BottomNavigationBarItem(icon: Image.asset(currentIndex == 3 ? 'assets/images/People.png' : 'assets/images/PeopleGrey.png'), label: 'Profile'),
+                BottomNavigationBarItem(
+                  icon: Image.asset(currentIndex == 2 ? 'assets/images/Alarm.png' : 'assets/images/AlarmGrey.png', height: 25),
+                  label: 'Inbox',
+                ),
+                BottomNavigationBarItem(
+                  icon: Image.asset(currentIndex == 3 ? 'assets/images/People.png' : 'assets/images/PeopleGrey.png', height: 25),
+                  label: 'Profile',
+                ),
               ],
             ),
           ),

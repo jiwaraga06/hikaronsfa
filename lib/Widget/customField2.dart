@@ -39,7 +39,7 @@ class CustomField2 extends StatelessWidget {
       keyboardType: keyboardType,
       maxLines: maxLines,
       onTap: onTap,
-      style: textStyle ?? const TextStyle(fontFamily: 'InterMedium', fontSize: 14),
+      style: textStyle ?? const TextStyle(fontFamily: 'InterMedium', fontSize: 12),
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,
@@ -50,8 +50,8 @@ class CustomField2 extends StatelessWidget {
         filled: true,
         fillColor: Colors.grey.shade50,
 
-        hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 13, fontFamily: 'InterMedium'),
-        labelStyle: TextStyle(color: Colors.grey.shade700, fontSize: 13, fontFamily: 'InterMedium'),
+        hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 12, fontFamily: 'InterMedium'),
+        labelStyle: TextStyle(color: Colors.grey.shade700, fontSize: 12, fontFamily: 'InterMedium'),
 
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
 

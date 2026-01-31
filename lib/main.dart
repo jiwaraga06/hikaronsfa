@@ -14,6 +14,7 @@ import 'package:hikaronsfa/source/repository/RepositoryVisitImage.dart';
 import 'package:hikaronsfa/source/repository/RepositoryVisitPic.dart';
 import 'package:hikaronsfa/source/repository/RepositoryVisitation.dart';
 import 'package:hikaronsfa/source/repository/repositoryCustomer.dart';
+import 'package:hikaronsfa/source/repository/repositoryOutstanding.dart';
 import 'package:hikaronsfa/source/router/router.dart';
 import 'package:hikaronsfa/source/service/Absensi/cubit/absensi_check_in_cubit.dart';
 import 'package:hikaronsfa/source/service/Absensi/cubit/absensi_check_out_cubit.dart';
@@ -33,6 +34,7 @@ import 'package:hikaronsfa/source/service/Location/cubit/get_location_customer_c
 import 'package:hikaronsfa/source/service/MarkerLocation/cubit/marker_location_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_detail_cubit.dart';
+import 'package:hikaronsfa/source/service/Outstanding/cubit/outstanding_shipment_cubit.dart';
 import 'package:hikaronsfa/source/service/Radius/cubit/get_radius_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/Delete/cubit/delete_visitation_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/Insert/cubit/insert_visitation_cubit.dart';
@@ -106,6 +108,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(create: (context) => RepositoryVisitDiscuss()),
         RepositoryProvider(create: (context) => RepositoryVisitImage()),
         RepositoryProvider(create: (context) => RepositoryBanner()),
+        RepositoryProvider(create: (context) => RepositoryOutstanding()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -156,6 +159,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => GetVisitationImageCubit(repository: RepositoryVisitImage())),
           BlocProvider(create: (context) => InsertVisitationImageCubit(repository: RepositoryVisitImage())),
           BlocProvider(create: (context) => UpdateVisitationImageCubit(repository: RepositoryVisitImage())),
+          // OUTSTANDING
+          BlocProvider(create: (context) => OutstandingShipmentCubit(repository: RepositoryOutstanding())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
