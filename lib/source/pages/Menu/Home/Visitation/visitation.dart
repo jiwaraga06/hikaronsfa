@@ -199,9 +199,23 @@ class _VisitationScreenState extends State<VisitationScreen> {
                             child: ExpansionTile(
                               // tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              leading: const Icon(Icons.assignment_outlined, size: 20),
+                              // leading: const Icon(Icons.assignment_outlined, size: 20),
                               title: Row(
-                                children: [Expanded(child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)))],
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 10))),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 9)),
+                                        Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 9)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                               children: [
                                 Table(
@@ -210,17 +224,17 @@ class _VisitationScreenState extends State<VisitationScreen> {
                                   children: [
                                     TableRow(
                                       children: [
-                                        const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
-                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
-                                        Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
+                                        const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                                     TableRow(
                                       children: [
-                                        const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
-                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 13)),
-                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
+                                        const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                        Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
@@ -235,7 +249,9 @@ class _VisitationScreenState extends State<VisitationScreen> {
                                       onPressed: () {
                                         Navigator.pushNamed(context, visitationDetailScreen, arguments: {"oid": item.visitationOid!});
                                       },
-                                      child: Row(children: [Icon(Icons.visibility_outlined), Text("Detail")]),
+                                      child: Row(
+                                        children: [Icon(Icons.visibility_outlined), Text("Detail", style: TextStyle(fontFamily: "InterMedium", fontSize: 12))],
+                                      ),
                                     ),
                                     TextButton(
                                       onPressed: () {
@@ -244,13 +260,17 @@ class _VisitationScreenState extends State<VisitationScreen> {
                                         });
                                         Navigator.pushNamed(context, updateVisitationScreen);
                                       },
-                                      child: Row(children: [Icon(Icons.edit_outlined), Text("Edit")]),
+                                      child: Row(
+                                        children: [Icon(Icons.edit_outlined), Text("Edit", style: TextStyle(fontFamily: "InterMedium", fontSize: 12))],
+                                      ),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         deleteVisitation(item.visitationOid!, item.attndOid);
                                       },
-                                      child: Row(children: [Icon(Icons.delete_outline), Text("Delete")]),
+                                      child: Row(
+                                        children: [Icon(Icons.delete_outline), Text("Delete", style: TextStyle(fontFamily: "InterMedium", fontSize: 12))],
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
             Container(
-              padding: const EdgeInsets.only(bottom: 16, left: 12, right: 12),
+              padding: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
               decoration: BoxDecoration(
                 color: whiteCustom2,
                 borderRadius: BorderRadius.circular(12),
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     decoration: BoxDecoration(color: ungu3.withOpacity(0.2), shape: BoxShape.circle),
                     padding: const EdgeInsets.all(6),
-                    child: Image.asset('assets/images/AccountMale.png', fit: BoxFit.contain),
+                    child: Image.asset('assets/images/AccountMale.png', fit: BoxFit.contain, height: 35),
                   ),
                   const SizedBox(width: 8),
                   BlocBuilder<ProfileCubit, ProfileState>(
@@ -67,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Hai, $username", style: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'InterSemiBold')),
-                          Text(email, style: TextStyle(color: ungu3, fontSize: 12, fontFamily: 'InterMedium')),
+                          Text("Hai, $username", style: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'InterSemiBold')),
+                          Text(email, style: TextStyle(color: ungu3, fontSize: 10, fontFamily: 'InterMedium')),
                         ],
                       );
                     },
@@ -86,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Builder(
                             builder: (context) {
                               return Container(
+                                margin: const EdgeInsets.all(8),
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(2)),
                                 child: ClipRRect(
@@ -205,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisCount: 4,
               crossAxisSpacing: 16,
               mainAxisSpacing: 4,
-              childAspectRatio: 1, 
+              childAspectRatio: 1,
               padding: const EdgeInsets.all(8),
               children: List.generate(titleMenu.length, (index) {
                 return InkWell(

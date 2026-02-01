@@ -186,7 +186,8 @@ class _OutstandingScreenState extends State<OutstandingScreen> {
                   child: Theme(
                     data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
-                      title: Text(customerName),
+                      title:Text(customerName, style: TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
+                      subtitle: Text("${customerData.length} Rol", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 11)),
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),

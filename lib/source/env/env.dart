@@ -17,8 +17,8 @@ enum AttendanceType { checkIn, checkOut }
 late List<CameraDescription> cameras;
 
 var selectedCustomerType = "C";
-// const url = "http://192.168.0.126:8000";
-const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
+const url = "http://192.168.0.126:8000";
+// const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
 // const url = "http://203.210.84.8:9999";
 // const url2 = "https://api-v3.hris.rsuumc.com";
 // const url2 = "https://api-v2.rsuumc.com";
