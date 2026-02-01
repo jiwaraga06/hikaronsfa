@@ -12,6 +12,10 @@ class OutstandingShipmentCubit extends Cubit<OutstandingShipmentState> {
   final RepositoryOutstanding? repository;
   OutstandingShipmentCubit({this.repository}) : super(OutstandingShipmentInitial());
 
+  void getInitial() {
+    emit(OutstandingShipmentInitial());
+  }
+
   void getOutstandingShipment(customerid, context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var salesid = pref.getString("user_as_sales_id");
