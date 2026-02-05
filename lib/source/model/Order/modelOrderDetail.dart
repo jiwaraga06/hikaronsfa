@@ -1,28 +1,28 @@
 import 'dart:convert';
 
-
 ModelOrderDetail modelOrderDetailFromJson(String str) => ModelOrderDetail.fromJson(json.decode(str));
 
 class ModelOrderDetail {
+  final String? orderOid;
+  final String? orderCode;
+  final String? orderStatus;
+  final DateTime? orderDate;
+  final String? ptnrName;
+  final int? ptnrId;
+  final String? orderRemarks;
+  final String? orderPo;
+  final List<Detail> detail;
   ModelOrderDetail({
     required this.orderOid,
     required this.orderCode,
     required this.orderStatus,
     required this.orderDate,
     required this.ptnrName,
+    required this.ptnrId,
     required this.orderRemarks,
     required this.orderPo,
     required this.detail,
   });
-
-  final String? orderOid;
-  final String? orderCode;
-  final String? orderStatus;
-  final DateTime? orderDate;
-  final String? ptnrName;
-  final String? orderRemarks;
-  final String? orderPo;
-  final List<Detail> detail;
 
   factory ModelOrderDetail.fromJson(Map<String, dynamic> json) {
     return ModelOrderDetail(
@@ -31,6 +31,7 @@ class ModelOrderDetail {
       orderStatus: json["order_status"],
       orderDate: DateTime.tryParse(json["order_date"] ?? ""),
       ptnrName: json["ptnr_name"],
+      ptnrId: json["ptnr_id"],
       orderRemarks: json["order_remarks"],
       orderPo: json["order_po"],
       detail: json["detail"] == null ? [] : List<Detail>.from(json["detail"]!.map((x) => Detail.fromJson(x))),

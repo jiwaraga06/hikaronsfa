@@ -1,30 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:hikaronsfa/source/env/env.dart';
 
-class CustomSearchDropdown extends StatefulWidget {
-  final List<dynamic> items;
-  final String hint;
-  final ValueChanged<String> onChanged;
-  final double height;
-
-  const CustomSearchDropdown({super.key, required this.items, required this.onChanged, this.hint = 'Select', this.height = 50});
-
-  @override
-  State<CustomSearchDropdown> createState() => _CustomSearchDropdownState();
+class CustomSearchDropdown extends FormField<String> {
+  CustomSearchDropdown({
+    super.key,
+    required List<dynamic> items,
+    required ValueChanged<String> onChanged,
+    String hint = 'Select',
+    double height = 50,
+    String? initialValue,
+    FormFieldValidator<String>? validator,
+  }) : super(
+         initialValue: initialValue,
+         validator: validator,
+         builder: (FormFieldState<String> state) {
+           return _CustomSearchDropdownBody(
+             items: items,
+             hint: hint,
+             height: height,
+             value: state.value,
+             errorText: state.errorText,
+             onChanged: (value) {
+               state.didChange(value); // 🔥 PENTING
+               onChanged(value);
+             },
+           );
+         },
+       );
 }
 
-class _CustomSearchDropdownState extends State<CustomSearchDropdown> {
+class _CustomSearchDropdownBody extends StatefulWidget {
+  final List<dynamic> items;
+  final String hint;
+  final double height;
+  final String? value;
+  final String? errorText;
+  final ValueChanged<String> onChanged;
+
+  const _CustomSearchDropdownBody({required this.items, required this.hint, required this.height, required this.onChanged, this.value, this.errorText});
+
+  @override
+  State<_CustomSearchDropdownBody> createState() => _CustomSearchDropdownBodyState();
+}
+
+class _CustomSearchDropdownBodyState extends State<_CustomSearchDropdownBody> {
   final LayerLink _layerLink = LayerLink();
   final TextEditingController _searchController = TextEditingController();
 
   OverlayEntry? _overlayEntry;
   bool _isOpen = false;
-  String? _selectedItem;
   List<dynamic> _filteredItems = [];
+  String? _selectedValue;
 
   @override
   void initState() {
     super.initState();
     _filteredItems = widget.items;
+    _selectedValue = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(covariant _CustomSearchDropdownBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != _selectedValue) {
+      _selectedValue = widget.value;
+    }
   }
 
   void _toggleDropdown() {
@@ -50,7 +90,7 @@ class _CustomSearchDropdownState extends State<CustomSearchDropdown> {
   }
 
   OverlayEntry _createOverlay() {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
 
     return OverlayEntry(
@@ -69,7 +109,7 @@ class _CustomSearchDropdownState extends State<CustomSearchDropdown> {
                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
                   child: Column(
                     children: [
-                      /// SEARCH FIELD
+                      /// SEARCH
                       Padding(
                         padding: const EdgeInsets.all(8),
                         child: TextField(
@@ -77,19 +117,19 @@ class _CustomSearchDropdownState extends State<CustomSearchDropdown> {
                           decoration: InputDecoration(
                             hintText: 'Search...',
                             prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                             isDense: true,
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           ),
                           onChanged: (value) {
                             setState(() {
-                              _filteredItems = widget.items.where((e) => e.toLowerCase().contains(value.toLowerCase())).toList();
+                              _filteredItems = widget.items.where((e) => e.toString().toLowerCase().contains(value.toLowerCase())).toList();
                             });
                             _overlayEntry?.markNeedsBuild();
                           },
                         ),
                       ),
 
-                      /// LIST ITEM
+                      /// LIST
                       Expanded(
                         child:
                             _filteredItems.isEmpty
@@ -101,14 +141,13 @@ class _CustomSearchDropdownState extends State<CustomSearchDropdown> {
                                     final item = _filteredItems[index];
                                     return InkWell(
                                       onTap: () {
-                                        setState(() => _selectedItem = item);
-                                        widget.onChanged(item);
+                                        setState(() {
+                                          _selectedValue = item.toString();
+                                        });
+                                        widget.onChanged(item.toString());
                                         _closeDropdown();
                                       },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                                        child: Text(item, style: const TextStyle(fontSize: 14)),
-                                      ),
+                                      child: Padding(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12), child: Text(item.toString())),
                                     );
                                   },
                                 ),
@@ -124,22 +163,38 @@ class _CustomSearchDropdownState extends State<CustomSearchDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: GestureDetector(
-        onTap: _toggleDropdown,
-        child: Container(
-          height: widget.height,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.grey.shade400), color: Colors.white),
-          child: Row(
-            children: [
-              Expanded(child: Text(_selectedItem ?? widget.hint, style: TextStyle(color: _selectedItem == null ? Colors.grey : Colors.black))),
-              Icon(_isOpen ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-            ],
+    final hasError = widget.errorText != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /// DROPDOWN FIELD
+        CompositedTransformTarget(
+          link: _layerLink,
+          child: GestureDetector(
+            onTap: _toggleDropdown,
+            child: Container(
+              height: widget.height,
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: hasError ? merah2 : Colors.grey.shade400),
+                color: Colors.white,
+              ),
+              child: Row(
+                children: [
+                  Expanded(child: Text(_selectedValue ?? widget.hint, style: TextStyle(color: _selectedValue == null ? Colors.grey : Colors.black))),
+                  Icon(_isOpen ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+
+        /// ERROR TEXT
+        if (hasError)
+          Padding(padding: const EdgeInsets.only(top: 6, left: 12), child: Text(widget.errorText!, style: const TextStyle(color: Colors.red, fontSize: 12))),
+      ],
     );
   }
 }

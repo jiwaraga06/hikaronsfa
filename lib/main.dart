@@ -24,16 +24,22 @@ import 'package:hikaronsfa/source/service/Auth/cubit/auth_cubit.dart';
 import 'package:hikaronsfa/source/service/Auth/cubit/profile_cubit.dart';
 import 'package:hikaronsfa/source/service/Banner/cubit/banner_cubit.dart';
 import 'package:hikaronsfa/source/service/CheckPermission/cubit/check_permission_cubit.dart';
-import 'package:hikaronsfa/source/service/Color/cubit/get_color_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/Color/cubit/get_color_cubit.dart';
 import 'package:hikaronsfa/source/service/Customer/cubit/get_customer_cubit.dart';
 import 'package:hikaronsfa/source/service/Customer/cubit/get_customer_visitation_cubit.dart';
-import 'package:hikaronsfa/source/service/Design/cubit/get_design_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/CustomerOrder/cubit/customer_order_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/Design/cubit/get_design_cubit.dart';
 import 'package:hikaronsfa/source/service/Location/cubit/add_location_cubit.dart';
 import 'package:hikaronsfa/source/service/Location/cubit/distance_location_cubit.dart';
 import 'package:hikaronsfa/source/service/Location/cubit/get_location_customer_cubit.dart';
 import 'package:hikaronsfa/source/service/MarkerLocation/cubit/marker_location_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/Meter/cubit/meter_per_roll_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/OrderDetail/cubit/order_detail_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/cubit/deleteorder_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_detail_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/cubit/insertorder_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/cubit/updateorder_cubit.dart';
 import 'package:hikaronsfa/source/service/Outstanding/cubit/outstanding_shipment_cubit.dart';
 import 'package:hikaronsfa/source/service/Radius/cubit/get_radius_cubit.dart';
 import 'package:hikaronsfa/source/service/Visitation/Delete/cubit/delete_visitation_cubit.dart';
@@ -137,7 +143,13 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => GetColorCubit(repository: RepositoryOrder())),
           // ORDER
           BlocProvider(create: (context) => GetOrderCubit(repository: RepositoryOrder())),
+          BlocProvider(create: (context) => MeterPerRollCubit(repository: RepositoryOrder())),
           BlocProvider(create: (context) => GetOrderDetailCubit(repository: RepositoryOrder())),
+          BlocProvider(create: (context) => CustomerOrderCubit(repository: RepositoryOrder())),
+          BlocProvider(create: (context) => InsertorderCubit(repository: RepositoryOrder())),
+          BlocProvider(create: (context) => UpdateorderCubit(repository: RepositoryOrder())),
+          BlocProvider(create: (context) => DeleteorderCubit(repository: RepositoryOrder())),
+          BlocProvider(create: (context) => OrderDetailCubit()),
           // VISITATION
           BlocProvider(create: (context) => GetVisitationCubit(repository: RepositoryVisitation())),
           BlocProvider(create: (context) => GetVisitationDetailCubit(repository: RepositoryVisitation())),

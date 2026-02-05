@@ -62,8 +62,16 @@ class RouterNavigation {
         return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const LokasiScreen(), transitionsBuilder: rightToLeft);
       case orderScreen:
         return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const OrderScreen(), transitionsBuilder: topToBottom);
+      case insertOrderScreen:
+        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const InsertOrderScreen(), transitionsBuilder: topToBottom);
+      case updateOrderScreen:
+        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const UpdateOrderScreen(), transitionsBuilder: topToBottom);
       case orderDetailScreen:
-        return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const OrderScreen(), transitionsBuilder: rightToLeft);
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const OrderDetailViewScreen(),
+          transitionsBuilder: rightToLeft,
+          settings: settings,
+        );
       case visitationScreen:
         return PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const VisitationScreen(), transitionsBuilder: topToBottom);
       case insertVisitationScreen:

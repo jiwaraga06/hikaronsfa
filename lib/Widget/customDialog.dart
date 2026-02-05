@@ -10,6 +10,7 @@ class MyDialog {
       builder: (context) {
         return const AlertDialog(
           content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [CircularProgressIndicator(color: biru3), SizedBox(width: 20), Text("Loading...", style: TextStyle(fontFamily: "InterMedium"))],
           ),
         );

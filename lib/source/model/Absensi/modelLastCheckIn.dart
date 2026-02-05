@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 // List<ModelLastCheckIn> modelLastCheckInfromJson(String str) => List<ModelLastCheckIn>.from(jsonDecode(str).map((x) => ModelLastCheckIn.fromJson(x)));
-ModelLastCheckIn modelLastCheckInFromJson(String str) => ModelLastCheckIn.fromJson(json.decode(str));
+ModelLastCheckIn modelLastCheckInFromJson(String str) => ModelLastCheckIn.fromJson(jsonDecode(str));
 
 class ModelLastCheckIn {
   ModelLastCheckIn({

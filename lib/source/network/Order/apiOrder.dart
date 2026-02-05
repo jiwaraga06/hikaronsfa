@@ -16,4 +16,24 @@ class ApiOrder {
   static getColorbyDesign(designId) {
     return "$url/api/orders/getColorbyDesign/$designId";
   }
+
+  static getCustomerOrder(salesid) {
+    return "$url/api/orders/getCustomerOrder/$salesid";
+  }
+
+  static meterPerRoll(ptcId) {
+    return "$url/api/orders/meterPerRoll/$ptcId";
+  }
+
+  static insertOrder() {
+    return "$url/api/orders/insertOrder";
+  }
+
+  static updateOrder() {
+    return "$url/api/orders/updateOrder";
+  }
+
+  static deleteOrder() {
+    return "$url/api/orders/deleteOrder";
+  }
 }

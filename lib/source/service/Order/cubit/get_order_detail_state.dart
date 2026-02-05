@@ -16,7 +16,8 @@ final class GetOrderDetailLoaded extends GetOrderDetailState {
 
 final class GetOrderDetailFailed extends GetOrderDetailState {
   final int? statusCode;
+  final String message;
   final dynamic json;
 
-  GetOrderDetailFailed({required this.statusCode, required this.json});
+  GetOrderDetailFailed({required this.statusCode, required this.json,required this.message});
 }

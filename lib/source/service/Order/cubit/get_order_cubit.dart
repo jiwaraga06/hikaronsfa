@@ -12,6 +12,10 @@ class GetOrderCubit extends Cubit<GetOrderState> {
   final RepositoryOrder? repository;
   GetOrderCubit({this.repository}) : super(GetOrderInitial());
 
+  void initial() {
+    emit(GetOrderInitial());
+  }
+
   void getOrder(startdate, enddate, context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var salesId = pref.getString("user_as_sales_id");

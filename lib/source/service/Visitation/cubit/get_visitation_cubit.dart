@@ -12,6 +12,10 @@ class GetVisitationCubit extends Cubit<GetVisitationState> {
   final RepositoryVisitation? repository;
   GetVisitationCubit({this.repository}) : super(GetVisitationInitial());
 
+  void initial() {
+    emit(GetVisitationInitial());
+  }
+
   void getVisitation(startdate, enddate, context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var salesId = pref.getString("user_as_sales_id");

@@ -25,6 +25,7 @@ class GetLastCheckInCubit extends Cubit<GetLastCheckInState> {
     }
     var statusCode = response.statusCode ?? 500;
     var json = response.data;
+    // print(json);
     if (statusCode == 200) {
       emit(GetLastCheckInLoaded(statusCode: statusCode, model: modelLastCheckInFromJson(jsonEncode(json['data']))));
     } else {

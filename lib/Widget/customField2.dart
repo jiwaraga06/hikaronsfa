@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hikaronsfa/source/env/env.dart';
 
 class CustomField2 extends StatelessWidget {
@@ -10,6 +11,9 @@ class CustomField2 extends StatelessWidget {
   final int maxLines;
   final TextStyle? textStyle;
   final TextInputType? keyboardType;
+  final ValueChanged<String>? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
+
 
   const CustomField2({
     super.key,
@@ -27,6 +31,8 @@ class CustomField2 extends StatelessWidget {
     this.maxLines = 1,
     this.textStyle,
     this.onTap,
+    this.onChanged,
+    this.inputFormatters
   });
 
   @override
@@ -39,7 +45,9 @@ class CustomField2 extends StatelessWidget {
       keyboardType: keyboardType,
       maxLines: maxLines,
       onTap: onTap,
+      inputFormatters: inputFormatters,
       style: textStyle ?? const TextStyle(fontFamily: 'InterMedium', fontSize: 12),
+      onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,

@@ -264,8 +264,8 @@ class _CheckINScreenState extends State<CheckINScreen> {
                     top: 70,
                     right: 18,
                     child: Container(
-                      width: 140,
-                      height: 220,
+                      width: 175,
+                      height: 250,
                       margin: const EdgeInsets.all(6),
                       decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(12)),
                       child: ClipRRect(

@@ -112,11 +112,11 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8),
-                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 12)),
+                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8),
-                                  child: Text(entry.value.visitationdJabatan ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 12)),
+                                  child: Text(entry.value.visitationdJabatan ?? '-', style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                 ),
                               ],
                             ),
@@ -148,7 +148,7 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8),
-                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'JakartaSansMedium', fontSize: 12)),
+                                  child: Text(entry.value.visitationdRemarks ?? '-', style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                 ),
                               ],
                             ),

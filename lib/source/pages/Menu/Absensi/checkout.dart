@@ -239,8 +239,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   top: 70,
                   right: 18,
                   child: Container(
-                    width: 140,
-                    height: 220,
+                    width: 175,
+                    height: 250,
                     margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(12)),
                     child: ClipRRect(
@@ -252,7 +252,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     ),
                   ),
                 ),
-
                 Positioned(
                   top: 0,
                   right: 0,
@@ -326,10 +325,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                       const Text('Lokasi Kamu', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 14)),
                                     ],
                                   ),
-                                  AutoSizeText(
-                                    "$alamatSaya",
-                                    style: TextStyle(fontFamily: 'InterMedium', fontSize: 10),
-                                  ),
+                                  AutoSizeText("$alamatSaya", style: TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
                                 ],
                               ),
                             ),

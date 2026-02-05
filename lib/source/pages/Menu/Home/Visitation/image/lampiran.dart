@@ -48,7 +48,7 @@ class _LampiranViewState extends State<LampiranView> {
               if (data.isEmpty) {
                 return SizedBox(
                   height: 180,
-                  child: Center(child: Text('Data Lampiran masih kosong', style: TextStyle(color: Colors.black, fontSize: 14, fontStyle: FontStyle.italic))),
+                  child: Center(child: Text('Data Lampiran masih kosong', style: TextStyle(color: Colors.black, fontSize: 12, fontStyle: FontStyle.italic))),
                 );
               }
               return ListView.separated(

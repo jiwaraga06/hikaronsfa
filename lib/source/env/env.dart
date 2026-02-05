@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:hikaronsfa/source/model/Order/modelEntryOrderDetail.dart';
 import 'package:hikaronsfa/source/model/VisitDiscuss/modelEntryDiscuss.dart';
 import 'package:hikaronsfa/source/model/VisitImage/modelEntryImage.dart';
 import 'package:hikaronsfa/source/model/VisitPIC/modelEntryPIC.dart';
@@ -17,8 +18,8 @@ enum AttendanceType { checkIn, checkOut }
 late List<CameraDescription> cameras;
 
 var selectedCustomerType = "C";
-const url = "http://192.168.0.126:8000";
-// const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
+// const url = "http://192.168.0.126:8000";
+const url = "https://toya-pyrheliometric-roseanne.ngrok-free.dev";
 // const url = "http://203.210.84.8:9999";
 // const url2 = "https://api-v3.hris.rsuumc.com";
 // const url2 = "https://api-v2.rsuumc.com";
@@ -38,6 +39,7 @@ int selectedIndex = 0;
 final List<ModelEntryImage> modelEntryImage = [];
 final List<ModelEntryPIC> modelEntryPIC = [];
 final List<ModelEntryDiscuss> modelEntryDiscuss = [];
+final List<ModelEntryOrderDetail> modelEntryOrderDetail = [];
 
 const hijau = Color(0XFF00712D);
 const hijauDark = Color(0XFF1A5319);
@@ -66,3 +68,5 @@ const grey = Color(0XFFBFC6C4);
 const grey2 = Color(0XFFEEEEEE);
 const grey3 = Color(0XFFCBCBCB);
 const teal = Color(0XFF088395);
+const peach = Color(0XFFD25353);
+const peachDark = Color(0XFF9E3B3B);

@@ -21,4 +21,28 @@ class RepositoryOrder {
     var json = await network(method: "GET", url: ApiOrder.getColorbyDesign(designId), body: null, context: context);
     return json;
   }
+
+  Future getCustomerOrder(salesid, context) async {
+    var json = await network(method: "GET", url: ApiOrder.getCustomerOrder(salesid), body: null, context: context);
+    return json;
+  }
+  Future meterPerRoll(ptcId, context) async {
+    var json = await network(method: "GET", url: ApiOrder.meterPerRoll(ptcId), body: null, context: context);
+    return json;
+  }
+
+  Future insertOrder(body, context) async {
+    var json = await network(method: "POST", url: ApiOrder.insertOrder(), body: body, context: context);
+    return json;
+  }
+
+  Future updateOrder(body, context) async {
+    var json = await network(method: "POST", url: ApiOrder.updateOrder(), body: body, context: context);
+    return json;
+  }
+
+  Future deleteOrder(body, context) async {
+    var json = await network(method: "POST", url: ApiOrder.deleteOrder(), body: body, context: context);
+    return json;
+  }
 }

@@ -12,6 +12,7 @@ class ApiCustomer {
   static getCustomerVisitation(salesId) {
     return "$url/api/customer/getCustomerVisitation/$salesId";
   }
+
   static getCustomerOutstanding(salesId) {
     return "$url/api/customer/getCustomerOutstanding/$salesId";
   }

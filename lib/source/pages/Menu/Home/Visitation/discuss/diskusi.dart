@@ -30,7 +30,7 @@ class _DiskusiViewState extends State<DiskusiView> {
               },
               text: "Tambah Diskusi",
               backgroundColor: whiteCustom2,
-              textStyle: TextStyle(fontSize: 16, color: biru, fontFamily: 'InterMedium'),
+              textStyle: TextStyle(fontSize: 14, color: biru, fontFamily: 'InterMedium'),
             ),
           ),
           const SizedBox(height: 12),
@@ -43,7 +43,7 @@ class _DiskusiViewState extends State<DiskusiView> {
               if (data.isEmpty) {
                 return SizedBox(
                   height: 180,
-                  child: Center(child: Text('Data Diskusi masih kosong', style: TextStyle(color: Colors.grey[600], fontSize: 14, fontStyle: FontStyle.italic))),
+                  child: Center(child: Text('Data Diskusi masih kosong', style: TextStyle(color: Colors.grey[600], fontSize: 12, fontStyle: FontStyle.italic))),
                 );
               }
               return ListView.builder(

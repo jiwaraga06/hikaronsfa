@@ -9,7 +9,7 @@ final class GetColorLoading extends GetColorState {}
 
 final class GetColorLoaded extends GetColorState {
   final int? statusCode;
-  final List<ModelColor>? modelColor;
+  final List<ModelColor> modelColor;
 
   GetColorLoaded({required this.statusCode, required this.modelColor});
 }

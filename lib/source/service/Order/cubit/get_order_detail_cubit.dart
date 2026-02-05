@@ -18,7 +18,7 @@ class GetOrderDetailCubit extends Cubit<GetOrderDetailState> {
     emit(GetOrderDetailLoading());
     final response = await repository!.getOrderDetail(oid, salesId, context);
     if (response == null) {
-      emit(GetOrderDetailFailed(statusCode: 500, json: {"message": "Response kosong"}));
+      emit(GetOrderDetailFailed(statusCode: 500, message: "NO Response", json: null));
       return;
     }
     var statusCode = response.statusCode ?? 500;
@@ -26,7 +26,7 @@ class GetOrderDetailCubit extends Cubit<GetOrderDetailState> {
     if (statusCode == 200) {
       emit(GetOrderDetailLoaded(statusCode: statusCode, modelOrderDetail: modelOrderDetailFromJson(jsonEncode(json['data']))));
     } else {
-      emit(GetOrderDetailFailed(statusCode: statusCode, json: json));
+      emit(GetOrderDetailFailed(statusCode: statusCode, message: json['message'], json: json));
     }
   }
 }

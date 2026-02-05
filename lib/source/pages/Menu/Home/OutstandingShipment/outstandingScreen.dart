@@ -16,12 +16,13 @@ class _OutstandingScreenState extends State<OutstandingScreen> {
 
   void setValueCustomer(value, data) {
     setState(() {
+      if (value == "ALL") {
+        customerid = 0;
+        customername = "ALL";
+      }
       data.where((e) => e.ptnrName == value).forEach((a) async {
         customerid = a.ptnrId;
         customername = a.ptnrName;
-        if (value == "ALL") {
-          customerid = 0;
-        }
       });
     });
   }
@@ -186,8 +187,13 @@ class _OutstandingScreenState extends State<OutstandingScreen> {
                   child: Theme(
                     data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
-                      title:Text(customerName, style: TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
-                      subtitle: Text("${customerData.length} Rol", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 11)),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(customerName, style: TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
+                          Text("${customerData.length} Rol", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 11)),
+                        ],
+                      ),
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),

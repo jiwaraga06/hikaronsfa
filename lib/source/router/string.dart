@@ -18,5 +18,7 @@ const checkOutScreen = "/dashboard/absensi/checkout";
 
 const orderScreen = "/dashboard/order";
 const orderDetailScreen = "/dashboard/order/detail";
+const insertOrderScreen = "/dashboard/order/insert";
+const updateOrderScreen = "/dashboard/order/update";
 
 const outstandingShipmentScreen = "/dashboard/shipment";
