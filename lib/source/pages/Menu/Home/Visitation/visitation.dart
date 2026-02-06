@@ -209,13 +209,13 @@ class _VisitationScreenState extends State<VisitationScreen> {
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Expanded(flex: 2, child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 10))),
+                                    Expanded(flex: 2, child: Text(item.visitationCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
-                                          Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 9)),
-                                          Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 9)),
+                                          Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
+                                          Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                         ],
                                       ),
                                     ),
@@ -228,17 +228,17 @@ class _VisitationScreenState extends State<VisitationScreen> {
                                     children: [
                                       TableRow(
                                         children: [
-                                          const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                          const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                          Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
+                                          const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                          const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                          Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                         ],
                                       ),
                                       const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                                       TableRow(
                                         children: [
-                                          const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                          const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                          Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
+                                          const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                          const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                          Text(item.visitationDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                         ],
                                       ),
                                       const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),

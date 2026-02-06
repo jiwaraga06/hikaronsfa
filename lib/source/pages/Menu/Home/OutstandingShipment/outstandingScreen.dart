@@ -190,8 +190,8 @@ class _OutstandingScreenState extends State<OutstandingScreen> {
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(customerName, style: TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
-                          Text("${customerData.length} Rol", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 11)),
+                          Text(customerName, style: TextStyle(fontFamily: 'InterMedium', fontSize: 13)),
+                          Text("${customerData.length} Rol", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
                         ],
                       ),
                       children: [

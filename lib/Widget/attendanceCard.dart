@@ -34,10 +34,10 @@ Widget attendanceCard({required String title, required bool isLoading, required 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 12, fontFamily: 'InterMedium')),
+                    Text(title, style: const TextStyle(fontSize: 13, fontFamily: 'InterMedium')),
                     Text(
                       data.attndDateIn == null ? '-' : formatDate3(DateTime.parse(data.attndDateIn!)),
-                      style: const TextStyle(fontSize: 10, fontFamily: 'InterSemiBold'),
+                      style: const TextStyle(fontSize: 11, fontFamily: 'InterSemiBold'),
                     ),
                   ],
                 ),
@@ -54,7 +54,7 @@ Widget attendanceCard({required String title, required bool isLoading, required 
                       ? Text("-", style: TextStyle(fontSize: 23, fontFamily: 'InterSemiBold'))
                       : Text(formatDateToTime3(DateTime.parse(data.attndTimeIn!)), style: const TextStyle(fontSize: 16, fontFamily: 'InterSemiBold')),
                   const SizedBox(height: 8),
-                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 10, fontFamily: 'InterRegular'), maxLines: 1),
+                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 11, fontFamily: 'InterRegular'), maxLines: 1),
                 ],
               ),
             ),
@@ -84,10 +84,10 @@ Widget attendanceCard({required String title, required bool isLoading, required 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 12, fontFamily: 'InterMedium')),
+                    Text(title, style: const TextStyle(fontSize: 13, fontFamily: 'InterMedium')),
                     Text(
                       data.attndDateOut == null ? '-' : formatDate3(DateTime.parse(data.attndDateIn!)),
-                      style: const TextStyle(fontSize: 10, fontFamily: 'InterSemiBold'),
+                      style: const TextStyle(fontSize: 11, fontFamily: 'InterSemiBold'),
                     ),
                   ],
                 ),
@@ -103,7 +103,7 @@ Widget attendanceCard({required String title, required bool isLoading, required 
                       ? Text("Check Out disini", style: TextStyle(fontSize: 13, fontFamily: 'InterSemiBold'))
                       : Text(formatDateToTime3(DateTime.parse(data.attndTimeOut!)), style: const TextStyle(fontSize: 18, fontFamily: 'InterSemiBold')),
                   const SizedBox(height: 8),
-                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 10, fontFamily: 'InterRegular'), maxLines: 1),
+                  AutoSizeText(data.attndCustName ?? '-', style: const TextStyle(fontSize: 11, fontFamily: 'InterRegular'), maxLines: 1),
                 ],
               ),
             ),

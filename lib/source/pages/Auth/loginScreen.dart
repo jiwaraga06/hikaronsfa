@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Center(child: Image.asset('assets/images/hikaron.jpg', height: 30)),
                   const SizedBox(height: 12),
-                  Center(child: Text("Sign in to my account", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 16))),
+                  Center(child: Text("Sign in to my account", style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 18))),
                   const SizedBox(height: 30),
                   const Text("Username", style: TextStyle(fontFamily: "InterRegular")),
                   const SizedBox(height: 6),
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: login,
                       text: "Sign In",
                       backgroundColor: ungu3,
-                      textStyle: const TextStyle(color: whiteCustom, fontSize: 16, fontFamily: 'InterSemiBold'),
+                      textStyle: const TextStyle(color: whiteCustom, fontSize: 18, fontFamily: 'InterSemiBold'),
                     ),
                   ),
                 ],

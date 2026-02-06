@@ -154,7 +154,7 @@ class _OrderScreenState extends State<OrderScreen> {
         appBar: AppBar(
           backgroundColor: peach,
           leading: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.arrow_back, color: Colors.white)),
-          title: Text("Order Customer", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 12)),
+          title: Text("Order Customer", style: TextStyle(color: Colors.white, fontFamily: 'InterMedium', fontSize: 14)),
           centerTitle: true,
           actions: [IconButton(onPressed: filterSearch, icon: Icon(Icons.search, color: Colors.white))],
         ),
@@ -252,10 +252,14 @@ class _OrderScreenState extends State<OrderScreen> {
                               title: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(flex: 2, child: Text(item.orderCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 10))),
+                                  Expanded(flex: 2, child: Text(item.orderCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
                                   Icon(expandedTileIndex.contains(index) ? Icons.expand_less : Icons.expand_more),
                                 ],
                               ),
+                              subtitle:
+                                  expandedTileIndex.contains(index)
+                                      ? SizedBox.shrink()
+                                      : Text(item.orderStatus!, style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 11)),
                               trailing: InkWell(
                                 onTap: () {
                                   Navigator.pushNamed(context, orderDetailScreen, arguments: {"order_oid": item.orderOid!});
@@ -269,25 +273,25 @@ class _OrderScreenState extends State<OrderScreen> {
                                   children: [
                                     TableRow(
                                       children: [
-                                        const Text('Status', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                        Text(item.orderStatus!, style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                        const Text('Status', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                        Text(item.orderStatus!, style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                                     TableRow(
                                       children: [
-                                        const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
+                                        const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                                     TableRow(
                                       children: [
-                                        const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
-                                        Text(item.orderDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 10)),
+                                        const Text('Date', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 12)),
+                                        Text(item.orderDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 12)),
                                       ],
                                     ),
                                     const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),

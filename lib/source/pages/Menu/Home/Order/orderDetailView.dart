@@ -53,7 +53,7 @@ class _OrderDetailViewScreenState extends State<OrderDetailViewScreen> {
                       leading: const Icon(Icons.people_alt, size: 20),
                       title: Row(
                         children: [
-                          Expanded(child: Text(data.ptnrName!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 13))),
+                          Expanded(child: Text(data.ptnrName!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 12))),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(color: peachDark.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),

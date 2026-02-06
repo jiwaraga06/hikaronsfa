@@ -67,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Hai, $username", style: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'InterSemiBold')),
-                          Text(email, style: TextStyle(color: ungu3, fontSize: 10, fontFamily: 'InterMedium')),
+                          Text("Hai, $username", style: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'InterSemiBold')),
+                          Text(email, style: TextStyle(color: ungu3, fontSize: 12, fontFamily: 'InterMedium')),
                         ],
                       );
                     },
@@ -223,12 +223,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(iconMenu[index], size: 18, color: Colors.white),
+                        Icon(iconMenu[index], size: 20, color: Colors.white),
                         const SizedBox(height: 6),
                         Text(
                           titleMenu[index],
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontFamily: 'InterRegular', fontSize: 9, color: Colors.white),
+                          style: const TextStyle(fontFamily: 'InterRegular', fontSize: 10, color: Colors.white),
                         ),
                       ],
                     ),

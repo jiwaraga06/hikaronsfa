@@ -80,7 +80,7 @@ class _VisitationDetailScreenState extends State<VisitationDetailScreen> {
                             decoration: BoxDecoration(color: biru.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
                             child: Text(
                               formatDate2(data.order!.visitationDate!),
-                              style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 10, color: biru),
+                              style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 11, color: biru),
                             ),
                           ),
                         ],
