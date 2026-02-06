@@ -35,6 +35,14 @@ class _InsertOrderScreenState extends State<InsertOrderScreen> {
     }
   }
 
+  void clearData() {
+    customerid = null;
+    customername = null;
+    controllerPO.clear();
+    controllerRemark.clear();
+    BlocProvider.of<OrderDetailCubit>(context).clearData();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +90,7 @@ class _InsertOrderScreenState extends State<InsertOrderScreen> {
                 if (state is InsertorderLoaded) {
                   Navigator.of(context).pop();
                   var message = state.message;
+                  clearData();
                   MyDialog.dialogSuccess2(context, message);
                 }
               },

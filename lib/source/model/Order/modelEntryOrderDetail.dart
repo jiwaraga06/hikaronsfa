@@ -3,6 +3,7 @@ class ModelEntryOrderDetail {
   final int? orderdDesignId;
   final String? orderdDesignName;
   final int? orderdPtId;
+  final int? ptcId;
   final String? orderdPtName;
   final String? orderdQtyRoll;
   final String? orderdQtyMtr;
@@ -12,6 +13,7 @@ class ModelEntryOrderDetail {
     required this.orderdDesignId,
     required this.orderdDesignName,
     required this.orderdPtId,
+    required this.ptcId,
     required this.orderdPtName,
     required this.orderdQtyRoll,
     required this.orderdQtyMtr,
@@ -23,6 +25,7 @@ class ModelEntryOrderDetail {
     int? orderdDesignId,
     String? orderdDesignName,
     int? orderdPtId,
+    int? ptcId,
     String? orderdPtName,
     String? orderdQtyRoll,
     String? orderdQtyMtr,
@@ -33,6 +36,7 @@ class ModelEntryOrderDetail {
       orderdDesignId: orderdDesignId ?? this.orderdDesignId,
       orderdDesignName: orderdDesignName ?? this.orderdDesignName,
       orderdPtId: orderdPtId ?? this.orderdPtId,
+      ptcId: ptcId ?? this.ptcId,
       orderdPtName: orderdPtName ?? this.orderdPtName,
       orderdQtyRoll: orderdQtyRoll ?? this.orderdQtyRoll,
       orderdQtyMtr: orderdQtyMtr ?? this.orderdQtyMtr,

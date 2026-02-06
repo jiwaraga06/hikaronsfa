@@ -12,7 +12,7 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
   TextEditingController controllerTanggal = TextEditingController();
   TextEditingController controllerPO = TextEditingController();
   TextEditingController controllerRemark = TextEditingController();
-
+  Key dropdownKey = UniqueKey();
   var customerid, customername;
 
   void setValueCustomer(value, data) {
@@ -35,10 +35,18 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
     }
   }
 
+  void clearData() {
+    customerid = null;
+    customername = null;
+    controllerPO.clear();
+    controllerRemark.clear();
+    BlocProvider.of<OrderDetailCubit>(context).clearData();
+  }
+
   @override
   void initState() {
     super.initState();
-        BlocProvider.of<OrderDetailCubit>(context).clearData();
+    BlocProvider.of<OrderDetailCubit>(context).clearData();
     context.read<GetOrderDetailCubit>().getOrderDetail(oid_uuid, context);
     BlocProvider.of<CustomerOrderCubit>(context).getCustomerOrder(context);
     BlocProvider.of<OrderDetailCubit>(context).loadData();
@@ -118,6 +126,7 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
                 if (state is UpdateorderLoaded) {
                   Navigator.of(context).pop();
                   var message = state.message;
+                  clearData();
                   MyDialog.dialogSuccess2(context, message);
                 }
               },

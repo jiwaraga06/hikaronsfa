@@ -10,6 +10,18 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   TextEditingController controllerTanggalAwal = TextEditingController();
   TextEditingController controllerTanggalAkhir = TextEditingController();
+  Set<int> expandedTileIndex = {};
+
+  void onExpansionTile(bool value, int index) {
+    setState(() {
+      if (value) {
+        expandedTileIndex.add(index);
+      } else {
+        expandedTileIndex.remove(index);
+      }
+    });
+  }
+
   void pilihTanggalAwal() {
     pickDate(context).then((value) {
       if (value != null) {
@@ -41,6 +53,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void deleteOrder(value) {
     BlocProvider.of<DeleteorderCubit>(context).deleteOrder(value, context);
+  }
+
+  void approveOrder(value) {
+    BlocProvider.of<ApproveOrderCubit>(context).approveOrder(value, context);
   }
 
   void filterSearch() {
@@ -153,24 +169,45 @@ class _OrderScreenState extends State<OrderScreen> {
           },
           child: const Icon(Icons.add, color: Colors.white),
         ),
-        body: BlocListener<DeleteorderCubit, DeleteorderState>(
-          listener: (context, state) {
-            if (state is DeleteorderLoading) {
-              MyDialog.dialogLoading(context);
-              return;
-            }
-            Navigator.of(context).pop();
-            if (state is DeleteorderFailed) {
-              var message = state.message;
-              MyDialog.dialogAlert2(context, message);
-            }
-            if (state is DeleteorderLoaded) {
-              var message = state.message;
-              MyDialog.dialogSuccess2(context, message);
-              getOrder();
-              // Navigator.of(context).pop(true);
-            }
-          },
+        body: MultiBlocListener(
+          listeners: [
+            BlocListener<DeleteorderCubit, DeleteorderState>(
+              listener: (context, state) {
+                if (state is DeleteorderLoading) {
+                  MyDialog.dialogLoading(context);
+                  return;
+                }
+                Navigator.of(context).pop();
+                if (state is DeleteorderFailed) {
+                  var message = state.message;
+                  MyDialog.dialogAlert2(context, message);
+                }
+                if (state is DeleteorderLoaded) {
+                  var message = state.message;
+                  MyDialog.dialogSuccess2(context, message);
+                  getOrder();
+                }
+              },
+            ),
+            BlocListener<ApproveOrderCubit, ApproveOrderState>(
+              listener: (context, state) {
+                if (state is ApproveOrderLoading) {
+                  MyDialog.dialogLoading(context);
+                  return;
+                }
+                Navigator.of(context).pop();
+                if (state is ApproveOrderFailed) {
+                  var message = state.message;
+                  MyDialog.dialogAlert2(context, message);
+                }
+                if (state is ApproveOrderLoaded) {
+                  var message = state.message;
+                  MyDialog.dialogSuccess2(context, message);
+                  getOrder();
+                }
+              },
+            ),
+          ],
           child: Column(
             children: [
               Expanded(
@@ -206,28 +243,38 @@ class _OrderScreenState extends State<OrderScreen> {
                               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 4, offset: const Offset(0, 2))],
                             ),
                             child: ExpansionTile(
+                              key: PageStorageKey(item.orderOid),
+                              initiallyExpanded: expandedTileIndex.contains(index),
                               childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              // leading: const Icon(Icons.assignment_outlined, size: 20),
+                              onExpansionChanged: (value) {
+                                onExpansionTile(value, index);
+                              },
                               title: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(flex: 2, child: Text(item.orderCode!, style: const TextStyle(fontFamily: 'InterSemiBold', fontSize: 10))),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Text(item.ptnrName!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 9)),
-                                        Text(item.orderDate!, style: const TextStyle(fontFamily: 'InterMedium', fontSize: 9)),
-                                      ],
-                                    ),
-                                  ),
+                                  Icon(expandedTileIndex.contains(index) ? Icons.expand_less : Icons.expand_more),
                                 ],
+                              ),
+                              trailing: InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(context, orderDetailScreen, arguments: {"order_oid": item.orderOid!});
+                                },
+                                child: Text("Lihat Detail", style: const TextStyle(fontFamily: 'InterRegular', fontSize: 12, color: biru)),
                               ),
                               children: [
                                 Table(
                                   border: TableBorder.all(style: BorderStyle.none),
                                   columnWidths: const <int, TableColumnWidth>{0: FixedColumnWidth(100), 1: FixedColumnWidth(15)},
                                   children: [
+                                    TableRow(
+                                      children: [
+                                        const Text('Status', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                        const Text(':', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                        Text(item.orderStatus!, style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
+                                      ],
+                                    ),
+                                    const TableRow(children: [SizedBox(height: 4), SizedBox(height: 4), SizedBox(height: 4)]),
                                     TableRow(
                                       children: [
                                         const Text('Customer', style: TextStyle(fontFamily: 'InterSemiBold', fontSize: 10)),
@@ -252,14 +299,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     TextButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(context, orderDetailScreen, arguments: {"order_oid": item.orderOid!});
-                                      },
-                                      child: Row(
-                                        children: [Icon(Icons.visibility_outlined), Text("Detail", style: TextStyle(fontFamily: "InterMedium", fontSize: 12))],
-                                      ),
-                                    ),
-                                    TextButton(
                                       onPressed: () async {
                                         setState(() {
                                           oid_uuid = item.orderOid!;
@@ -279,6 +318,14 @@ class _OrderScreenState extends State<OrderScreen> {
                                       },
                                       child: Row(
                                         children: [Icon(Icons.delete_outline), Text("Delete", style: TextStyle(fontFamily: "InterMedium", fontSize: 12))],
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        approveOrder(item.orderOid!);
+                                      },
+                                      child: Row(
+                                        children: [Icon(Icons.check), Text("Request Approve", style: TextStyle(fontFamily: "InterMedium", fontSize: 12))],
                                       ),
                                     ),
                                   ],

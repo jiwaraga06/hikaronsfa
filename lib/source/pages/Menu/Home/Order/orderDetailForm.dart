@@ -25,6 +25,7 @@ class OrderDetailForm extends StatefulWidget {
 class _OrderDetailFormState extends State<OrderDetailForm> {
   var designName, designid;
   var colorName, colorid;
+  var ptcId;
   int meter = 0;
   final formkey = GlobalKey<FormState>();
   TextEditingController controllerQtyRoll = TextEditingController();
@@ -44,6 +45,7 @@ class _OrderDetailFormState extends State<OrderDetailForm> {
           orderdDesignId: designid,
           orderdPtId: colorid,
           orderdPtName: colorName,
+          ptcId: ptcId,
           orderdQtyRoll: controllerQtyRoll.text,
           orderdQtyMtr: controllerQtyMeter.text,
           orderdPrice: controllerHarga.text.replaceAll(RegExp(r'[^0-9]'), ''),
@@ -54,12 +56,14 @@ class _OrderDetailFormState extends State<OrderDetailForm> {
           orderdDesignName: designName,
           orderdDesignId: designid,
           orderdPtId: colorid,
+          ptcId: ptcId,
           orderdPtName: colorName,
           orderdQtyRoll: controllerQtyRoll.text,
           orderdQtyMtr: controllerQtyMeter.text,
           orderdPrice: controllerHarga.text.replaceAll(RegExp(r'[^0-9]'), ''),
         );
       }
+      BlocProvider.of<OrderDetailCubit>(context).loadData();
       Navigator.pop(context);
     }
   }
@@ -79,6 +83,7 @@ class _OrderDetailFormState extends State<OrderDetailForm> {
       colorName = value;
       data.where((e) => e.colorCode == value).forEach((a) async {
         colorid = a.ptId;
+        ptcId = a.ptPtcId;
         BlocProvider.of<MeterPerRollCubit>(context).getMeter(a.ptPtcId, context);
         controllerQtyRoll.text = "0";
         controllerQtyMeter.text = "0";
@@ -98,6 +103,7 @@ class _OrderDetailFormState extends State<OrderDetailForm> {
       controllerQtyRoll.text = widget.data!.orderdQtyRoll!;
       controllerQtyMeter.text = widget.data!.orderdQtyMtr!;
       controllerHarga.text = formatRupiah(int.parse(widget.data!.orderdPrice!));
+      BlocProvider.of<GetColorCubit>(context).getColor(designid, context);
     }
   }
 
@@ -116,12 +122,16 @@ class _OrderDetailFormState extends State<OrderDetailForm> {
           BlocListener<MeterPerRollCubit, MeterPerRollState>(
             listener: (context, state) {
               if (state is MeterPerRollLoading) {
-                MyDialog.dialogLoading(context);
+                if (!isEdit) {
+                  MyDialog.dialogLoading(context);
+                }
               }
               if (state is MeterPerRollLoaded) {
-                Navigator.pop(context);
+                if (!isEdit) {
+                  Navigator.pop(context);
+                }
                 var json = state.json;
-                meter = int.parse(json['data']['mtr_per_rol']);
+                meter = int.parse(json['data']['mtr_per_rol'].toString());
                 print(meter);
               }
             },
@@ -129,10 +139,21 @@ class _OrderDetailFormState extends State<OrderDetailForm> {
           BlocListener<GetColorCubit, GetColorState>(
             listener: (context, state) {
               if (state is GetColorLoading) {
-                MyDialog.dialogLoading(context);
+                if (!isEdit) {
+                  MyDialog.dialogLoading(context);
+                }
               }
               if (state is GetColorLoaded) {
-                Navigator.pop(context);
+                if (!isEdit) {
+                  Navigator.pop(context);
+                } else {
+                  var data = state.modelColor;
+                  data.where((e) => e.colorCode == colorName).forEach((a) async {
+                    colorid = a.ptId;
+                    ptcId = a.ptPtcId;
+                    BlocProvider.of<MeterPerRollCubit>(context).getMeter(a.ptPtcId, context);
+                  });
+                }
               }
             },
           ),

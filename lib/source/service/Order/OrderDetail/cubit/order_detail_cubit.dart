@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:hikaronsfa/source/env/env.dart';
+import 'package:hikaronsfa/source/env/generateRandomID.dart';
 import 'package:hikaronsfa/source/model/Order/modelEntryOrderDetail.dart';
 import 'package:meta/meta.dart';
 
@@ -21,6 +22,7 @@ class OrderDetailCubit extends Cubit<OrderDetailState> {
     int? orderdDesignId,
     String? orderdDesignName,
     int? orderdPtId,
+    int? ptcId,
     String? orderdPtName,
     String? orderdQtyRoll,
     String? orderdQtyMtr,
@@ -28,10 +30,11 @@ class OrderDetailCubit extends Cubit<OrderDetailState> {
   }) {
     modelEntryOrderDetail.add(
       ModelEntryOrderDetail(
-        generateID: modelEntryOrderDetail.length + 1,
+        generateID: generateRandomNumber(),
         orderdDesignName: orderdDesignName,
         orderdDesignId: orderdDesignId,
         orderdPtId: orderdPtId,
+        ptcId: ptcId,
         orderdPtName: orderdPtName,
         orderdQtyRoll: orderdQtyRoll,
         orderdQtyMtr: orderdQtyMtr,
@@ -45,6 +48,7 @@ class OrderDetailCubit extends Cubit<OrderDetailState> {
     int? orderdDesignId,
     String? orderdDesignName,
     int? orderdPtId,
+    int? ptcId,
     String? orderdPtName,
     String? orderdQtyRoll,
     String? orderdQtyMtr,
@@ -52,10 +56,11 @@ class OrderDetailCubit extends Cubit<OrderDetailState> {
   }) {
     modelEntryOrderDetail.add(
       ModelEntryOrderDetail(
-        generateID: modelEntryOrderDetail.length + 1,
+        generateID: generateRandomNumber(),
         orderdDesignName: orderdDesignName,
         orderdDesignId: orderdDesignId,
         orderdPtId: orderdPtId,
+        ptcId: ptcId,
         orderdPtName: orderdPtName,
         orderdQtyRoll: orderdQtyRoll,
         orderdQtyMtr: orderdQtyMtr,
@@ -70,6 +75,7 @@ class OrderDetailCubit extends Cubit<OrderDetailState> {
     int? orderdDesignId,
     String? orderdDesignName,
     int? orderdPtId,
+    int? ptcId,
     String? orderdPtName,
     String? orderdQtyRoll,
     String? orderdQtyMtr,
@@ -81,12 +87,14 @@ class OrderDetailCubit extends Cubit<OrderDetailState> {
         orderdDesignName: orderdDesignName,
         orderdDesignId: orderdDesignId,
         orderdPtId: orderdPtId,
+        ptcId: ptcId,
         orderdPtName: orderdPtName,
         orderdQtyRoll: orderdQtyRoll,
         orderdQtyMtr: orderdQtyMtr,
         orderdPrice: orderdPrice,
       );
     }
+    print(modelEntryOrderDetail);
     emit(OrderDetailLoaded(model: List.from(modelEntryOrderDetail)));
   }
 

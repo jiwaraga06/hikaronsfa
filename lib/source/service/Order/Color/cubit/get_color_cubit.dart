@@ -20,6 +20,7 @@ class GetColorCubit extends Cubit<GetColorState> {
     }
     var statusCode = response.statusCode ?? 500;
     var json = response.data;
+    print(json);
     if (statusCode == 200) {
       emit(GetColorLoaded(statusCode: statusCode, modelColor: modelColorfromJson(jsonEncode(json['data']))));
     } else {

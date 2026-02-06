@@ -16,6 +16,7 @@ class MeterPerRollCubit extends Cubit<MeterPerRollState> {
     }
     var json = response.data;
     var statusCode = response.statusCode;
+    
     if (statusCode == 200) {
       emit(MeterPerRollLoaded(statusCode: statusCode, message: json['message'], json: json));
     } else {

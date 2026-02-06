@@ -36,4 +36,7 @@ class ApiOrder {
   static deleteOrder() {
     return "$url/api/orders/deleteOrder";
   }
+  static approveOrder() {
+    return "$url/api/orders/approveOrder";
+  }
 }

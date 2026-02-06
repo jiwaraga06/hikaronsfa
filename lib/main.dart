@@ -35,6 +35,7 @@ import 'package:hikaronsfa/source/service/Location/cubit/get_location_customer_c
 import 'package:hikaronsfa/source/service/MarkerLocation/cubit/marker_location_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/Meter/cubit/meter_per_roll_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/OrderDetail/cubit/order_detail_cubit.dart';
+import 'package:hikaronsfa/source/service/Order/cubit/approve_order_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/deleteorder_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_cubit.dart';
 import 'package:hikaronsfa/source/service/Order/cubit/get_order_detail_cubit.dart';
@@ -149,6 +150,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => InsertorderCubit(repository: RepositoryOrder())),
           BlocProvider(create: (context) => UpdateorderCubit(repository: RepositoryOrder())),
           BlocProvider(create: (context) => DeleteorderCubit(repository: RepositoryOrder())),
+          BlocProvider(create: (context) => ApproveOrderCubit(repository: RepositoryOrder())),
           BlocProvider(create: (context) => OrderDetailCubit()),
           // VISITATION
           BlocProvider(create: (context) => GetVisitationCubit(repository: RepositoryVisitation())),

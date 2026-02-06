@@ -26,6 +26,7 @@ class RepositoryOrder {
     var json = await network(method: "GET", url: ApiOrder.getCustomerOrder(salesid), body: null, context: context);
     return json;
   }
+
   Future meterPerRoll(ptcId, context) async {
     var json = await network(method: "GET", url: ApiOrder.meterPerRoll(ptcId), body: null, context: context);
     return json;
@@ -43,6 +44,11 @@ class RepositoryOrder {
 
   Future deleteOrder(body, context) async {
     var json = await network(method: "POST", url: ApiOrder.deleteOrder(), body: body, context: context);
+    return json;
+  }
+
+  Future approveOrder(body, context) async {
+    var json = await network(method: "POST", url: ApiOrder.approveOrder(), body: body, context: context);
     return json;
   }
 }
