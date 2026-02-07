@@ -7,6 +7,11 @@ class RepositoryCustomer {
     return json;
   }
 
+  Future getNonLocationCustomer(salesId, context) async {
+    var json = await network(url: ApiCustomer.getNonLocationCustomer(salesId), method: "GET", body: null, context: context);
+    return json;
+  }
+
   Future getAllCustomer(salesId, context) async {
     var json = await network(url: ApiCustomer.getAllCustomer(salesId), method: "GET", body: null, context: context);
     return json;
@@ -16,6 +21,7 @@ class RepositoryCustomer {
     var json = await network(url: ApiCustomer.getCustomerVisitation(salesId), method: "GET", body: null, context: context);
     return json;
   }
+
   Future getCustomerOutstanding(salesId, context) async {
     var json = await network(url: ApiCustomer.getCustomerOutstanding(salesId), method: "GET", body: null, context: context);
     return json;

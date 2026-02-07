@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:hikaronsfa/source/repository/RepositoryLocation.dart';
 import 'package:meta/meta.dart';
 
@@ -8,10 +9,10 @@ class AddLocationCubit extends Cubit<AddLocationState> {
   final RepositoryLocation? repository;
   AddLocationCubit({this.repository}) : super(AddLocationInitial());
 
-  void addLocation(confl_cust_id, latitude, longitude, confl_location_desc, context) async {
-    emit(AddLocationLoading());
-    var body = {"confl_cust_id": confl_cust_id, "confl_latitude_longitude": "$latitude,$longitude", "confl_location_desc": "$confl_location_desc"};
+  void addLocation({int? customerId, double? latitude, double? longitude, bool? isManual, String? desc, BuildContext? context}) async {
+    var body = {"manualMode": isManual, "confl_cust_id": customerId, "confl_latitude_longitude": "$latitude, $longitude", "confl_location_desc": "$desc"};
     print(body);
+    emit(AddLocationLoading());
     repository!.addLocation(body, context).then((value) {
       var json = value.data;
       var statusCode = value.statusCode;
